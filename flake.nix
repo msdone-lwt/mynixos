@@ -64,23 +64,32 @@
         modules = [
           # > nixos 配置文件 <
           ./nixos/configuration.nix
+	  # 集成 home-manager 配置: 导入 Home Manager NixOS 模块
+	  home-manager.nixosModules.home-manager
+            {
+	      home-manager.useGlobalPkgs = true;   # 使用系统级的 nixpkgs 实例
+	      home-manager.useUserPackages = true; # 软件包安装到用户的 profile 中
+              home-manager.extraSpecialArgs = { inherit inputs; }; # 传递参数给 home.nix
+	      # 关联你的用户名和配置文件
+	      home-manager.users.msdone = import ./home-manager/home.nix;
+            }
         ];
       };
     };
 
     # 独立的 home-manager 配置入口点
     # 可通过 'home-manager --flake .#your-username@your-hostname' 使用
-    homeConfigurations = {
-      # 替换为你的 用户名@主机名
-      "msdone@nixos-msdone" = home-manager.lib.homeManagerConfiguration {
-        # Home-manager 需要 'pkgs' 实例 根据你的架构替换 x86_64-linux
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {inherit inputs;};
-        modules = [
-          # > home-manager 配置文件 <
-          ./home-manager/home.nix
-        ];
-      };
-    };
+    # homeConfigurations = {
+    #   # 替换为你的 用户名@主机名
+    #   "msdone@nixos-msdone" = home-manager.lib.homeManagerConfiguration {
+    #     # Home-manager 需要 'pkgs' 实例 根据你的架构替换 x86_64-linux
+    #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    #     extraSpecialArgs = {inherit inputs;};
+    #     modules = [
+    #       # > home-manager 配置文件 <
+    #       ./home-manager/home.nix
+    #     ];
+    #   };
+    # };
   };
 }
