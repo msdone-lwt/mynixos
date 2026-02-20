@@ -33,6 +33,8 @@
       steam
       lazygit
       fastfetch
+      # ghostty flake, pkgs.stdenv.hostPlatform.system 会自动匹配你的系统架构（如 x86_64-linux）
+      inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 

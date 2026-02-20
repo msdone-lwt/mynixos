@@ -170,6 +170,8 @@ in
 
   # 7: 系统级软件包与程序
   programs.firefox.enable = false;
+  programs.nano.enable = false;
+  environment.variables.EDITOR = "nvim";
   environment.systemPackages = with pkgs; [
     neovim
     wget

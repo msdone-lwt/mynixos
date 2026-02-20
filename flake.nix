@@ -7,7 +7,8 @@
   # 4. 怎么提交 clash party 到 nixpkgs
   # 5. hm 定义软件配置, git 的作者邮箱等 ✅
   # 6. gnome 配置 fira code 字体 ✅
-  # 7. gm配置 nvim、lazygit、git、zsh、tmux
+  # 7. hm配置 nvim、lazygit、git、zsh、tmux、alactirry、google
+  # 8. rebuild alias: cd /etc/nixos && sudo git add . && sudo nix flake update && sudo nixos-rebuild switch --flake .#nixos-msdone
 
   inputs = {
     # Nixpkgs 软件源:  你可以同时访问来自不同 nixpkgs 版本的软件包和模块。这里是一个运行示例：
@@ -18,6 +19,8 @@
     # Home manager 配置管理
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    # ghostty flake
+    ghostty.url = "github:ghostty-org/ghostty";
   };
 
   outputs = {
