@@ -12,7 +12,12 @@
   pkgs,
   ...
 }:
-
+# 1. 在这里定义你的全局变量
+let
+  myFont = "FiraCode Nerd Font";
+  myMonoFont = "FiraCode Nerd Font Mono";
+  myFontSize = "12";
+in
 {
   # 你可以在这里导入其他的 NixOS 模块
   imports = [
@@ -129,10 +134,10 @@
     fontconfig = {
       enable = true;
       defaultFonts = {
-        monospace = [ "FiraCode Nerd Font Mono" ];
-        sansSerif = [ "FiraCode Nerd Font" ];
-        serif = [ "FiraCode Nerd Font" ];
-        emoji = [ "FiraCode Nerd Font" ];
+	monospace = [ "${myMonoFont}" ];
+        sansSerif = [ "${myFont}" ];
+        serif     = [ "${myFont}" ];
+        emoji     = [ "${myFont}" ];
       };
     };
   };
@@ -148,6 +153,20 @@
       variant = "";
     };
   };
+  # 覆盖 GNOME 的默认 GSettings 设置
+  services.desktopManager.gnome.extraGSettingsOverrides = ''
+    [org.gnome.desktop.interface]
+    font-name='${myFont} ${myFontSize}'
+    document-font-name='${myFont} ${myFontSize}'
+    monospace-font-name='${myMonoFont} ${myFontSize}'
+
+    [org.gnome.desktop.wm.preferences]
+    titlebar-font='${myFont} Bold ${myFontSize}'
+  '';
+  environment.etc."gtk-3.0/settings.ini".text = ''
+    [Settings]
+    gtk-font-name=${myFont} ${myFontSize}
+  '';
 
   # 7: 系统级软件包与程序
   programs.firefox.enable = false;
@@ -157,7 +176,6 @@
     git
     curl
     htop
-    fastfetch
   ];
 
   # 8: 打印机 Enable CUPS to print documents.

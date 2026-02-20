@@ -1,12 +1,13 @@
 {
   description = "msdone's nix config";
   # todo :
-  # 1. 整合 config hardware
-  # 2. starter config 目录结构什么意思
-  # 3. 覆盖 clash verge rev 2.3.5 版本
+  # 1. 整合 config hardware ✅
+  # 2. starter config 目录结构什么意思  ✅
+  # 3. 覆盖 clash verge rev 2.3.5 版本 ✅
   # 4. 怎么提交 clash party 到 nixpkgs
-  # 5. hm 定义软件配置, git 的作者邮箱等
-  # 6. gnome 配置 fira code 字体
+  # 5. hm 定义软件配置, git 的作者邮箱等 ✅
+  # 6. gnome 配置 fira code 字体 ✅
+  # 7. gm配置 nvim、lazygit、git、zsh、tmux
 
   inputs = {
     # Nixpkgs 软件源:  你可以同时访问来自不同 nixpkgs 版本的软件包和模块。这里是一个运行示例：

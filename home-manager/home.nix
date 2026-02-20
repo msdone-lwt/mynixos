@@ -10,13 +10,14 @@
   # 你可以在这里导入其他的 home-manager 模块
   imports = [
     # 如果你想使用你自己的 flake 导出的模块（来自 modules/home-manager）：
-    # inputs.self.homeManagerModules.example
+    # inputs.self.homeManagerMod#ules.example
 
     # 或者来自其他 flake 导出的模块（例如 nix-colors）：
     # inputs.nix-colors.homeManagerModules.default
 
     # 你也可以将配置拆分并在这里导入片段：
     # ./nvim.nix
+    ./git.nix
   ];
 
   home = {
@@ -30,6 +31,8 @@
       clash-verge-rev
       google-chrome
       steam
+      lazygit
+      fastfetch
     ];
   };
 
