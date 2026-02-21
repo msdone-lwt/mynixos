@@ -32,7 +32,7 @@
 
   # 2. 允许安装带有 CVE 漏洞的博通旧驱动
   nixpkgs.config.permittedInsecurePackages = [
-    "broadcom-sta-6.30.223.271-59-6.12.70"
+    "broadcom-sta-6.30.223.271-59-6.12.73"
   ];
 
   # 3. 指定内核模块和驱动包
