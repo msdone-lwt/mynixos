@@ -180,6 +180,7 @@ in
     git
     curl
     htop
+    mihomo
   ];
 
   # 8: 打印机 Enable CUPS to print documents.
@@ -215,6 +216,7 @@ in
       # 如果你打算使用 SSH 连接，请在这里添加你的 SSH 公钥
     ];
   };
+  # 系统层 git 配置
   programs.git = {
     enable = true;
     # 这会生成全系统通用的 /etc/gitconfig
@@ -248,6 +250,16 @@ in
   #     PasswordAuthentication = false;
   #   };
   # };
+
+  # 提权包装器
+  security.wrappers.mihomo = {
+    owner = "root";
+    group = "root";
+    capabilities = "cap_net_admin,cap_net_bind_service+ep";
+    # 指向系统安装的 mihomo 二进制源文件
+    source = "${pkgs.mihomo}/bin/mihomo";
+  };
+  boot.kernelModules = [ "tun" ];
 
 
   # Some programs need SUID wrappers, can be configured further or are
