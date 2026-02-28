@@ -30,7 +30,6 @@
     packages = with pkgs; [
       # clash-verge-rev
       pkgs.sparkle
-      pkgs.notion-app-enhanced
       google-chrome
       steam
       lazygit
