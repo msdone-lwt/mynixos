@@ -180,7 +180,6 @@ in
     git
     curl
     htop
-    mihomo
   ];
 
   # 8: 打印机 Enable CUPS to print documents.
@@ -256,8 +255,8 @@ in
     owner = "root";
     group = "root";
     capabilities = "cap_net_admin,cap_net_bind_service+ep";
-    # 指向系统安装的 mihomo 二进制源文件
-    source = "${pkgs.mihomo}/bin/mihomo";
+    # 使用 Sparkle 自带的二进制文件作为源
+    source = "${pkgs.sparkle}/opt/sparkle/resources/sidecar/mihomo";
   };
   boot.kernelModules = [ "tun" ];
 
