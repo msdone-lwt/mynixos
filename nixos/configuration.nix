@@ -171,6 +171,8 @@ in
   # 7: 系统级软件包与程序
   programs.firefox.enable = false;
   programs.nano.enable = false;
+  # 启用 CoolerControl 守护进程和图形界面
+  programs.coolercontrol.enable = true;
   environment.variables.EDITOR = "nvim";
   environment.systemPackages = with pkgs; [
     neovim

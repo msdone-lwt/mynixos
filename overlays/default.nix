@@ -11,12 +11,12 @@
     # FIXME: 更新版本或者使用 nixpkgs 官方包
     clash-verge-rev = prev.clash-verge-rev.overrideAttrs (oldAttrs: rec {
       # 如果该版本的依赖或构建脚本没有显著变化，通常只需要覆盖 version 和 src 即可
-      version = "2.4.5"; # 你指定的版本
+      version = "2.4.6"; # 你指定的版本
       src = prev.fetchurl {
         # 构造对应的 GitHub 下载链接
         url = "https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v${version}/Clash.Verge_${version}_amd64.deb";
         # 这是一个占位哈希值。当你第一次运行构建时，Nix 会报错并告诉你正确的哈希值。
-        hash = "sha256-XOu1j+P2bcjDQXTLUvMdnJBkXWIWCm/gfMFKcEQiK/A=";  
+        hash = "sha256-QXPb6H/wLzg3m6h522WhKOzm2LPmbU0sB636mJq3Rx0=";  
       };
       # 1. 添加自动修复工具和解压工具
       nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ 

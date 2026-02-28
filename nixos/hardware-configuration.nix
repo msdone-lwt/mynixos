@@ -8,40 +8,25 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ehci_pci" "ahci" "firewire_ohci" "uas" "sd_mod" "sr_mod" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [ "nvme" "ahci" "xhci_pci" "usbhid" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
+  boot.blacklistedKernelModules = [ "nct6683" ];
+  boot.kernelModules = [ "kvm-amd" "nct6687" ]; # nct6683 为 MSI 主板内核驱动，通过 sudo sensors-detect 查找
+  boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7250c005-b1b0-4b18-be8b-3e6a980e9924";
+    { device = "/dev/disk/by-uuid/a82da222-59e9-482f-8ee4-99faacad8f78";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/16F9-4DB8";
+    { device = "/dev/disk/by-uuid/7C2F-E93B";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/7215707a-ac83-4513-b51f-e21517f65028"; }
-    ];
+  swapDevices = [ ];
 
-  # --- 新增博通驱动配置 ---
-  # 1. 允许非开源软件
-  nixpkgs.config.allowUnfree = true;
-
-  # 2. 允许安装带有 CVE 漏洞的博通旧驱动
-  nixpkgs.config.permittedInsecurePackages = [
-    "broadcom-sta-6.30.223.271-59-6.12.73"
-  ];
-
-  # 3. 指定内核模块和驱动包
-  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
-  boot.kernelModules = [ "wl" "kvm-intel" ];
-  
-  # 4. 禁用冲突的开源驱动
-  boot.blacklistedKernelModules = [ "b43" "ssb" "bcma" "brcmsmac" ];
-  
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
