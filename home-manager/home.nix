@@ -29,6 +29,7 @@
     # 根据你的需求添加用户专属软件包：
     packages = with pkgs; [
       clash-verge-rev
+      pkgs.sparkle
       google-chrome
       steam
       lazygit
