@@ -15,6 +15,9 @@
         name = "msdone";
 	email = "lwt6077@gmail.com";
       };
+      safe = {
+        directory = "/etc/nixos";
+      };
       init.defaultBranch = "main";
       core.editor = "nvim";
     };

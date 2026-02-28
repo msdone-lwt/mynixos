@@ -215,6 +215,25 @@ in
       # 如果你打算使用 SSH 连接，请在这里添加你的 SSH 公钥
     ];
   };
+  programs.git = {
+    enable = true;
+    # 这会生成全系统通用的 /etc/gitconfig
+    config = {
+      user = {
+        name = "msdone";
+        email = "lwt6077@gmail.com";
+      };
+      safe = {
+        directory = "/etc/nixos";
+      };
+      core = {
+        editor = "nvim";
+      };
+      init = {
+        defaultBranch = "main";
+      };
+    };
+  };
 
   # 11: ssh
   # 这里设置 SSH 服务器。如果你正在设置无头系统（服务器），这非常重要。
