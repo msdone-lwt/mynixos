@@ -7,6 +7,20 @@
   # 你可以更改版本、添加补丁、设置编译标志，几乎任何内容都可以。 
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
+    # sparkle 开启 tun 模式
+    sparkle = prev.sparkle.overrideAttrs (oldAttrs: {
+      postFixup = (oldAttrs.postFixup or "") + ''
+        echo "正在 Overlay 中替换 Sparkle 内核..."
+        
+        target="$out/opt/sparkle/resources/sidecar/mihomo"
+        
+        # 1. 删除自带的无权限内核
+        rm -f "$target"
+        
+        # 2. 创建软链接指向系统 Wrapper（/run/wrappers/bin/mihomo）
+        ln -s /run/wrappers/bin/mihomo "$target"
+      '';
+    });
     # 覆盖 clash-verge-rev 软件包
     # FIXME: 更新版本或者使用 nixpkgs 官方包
     clash-verge-rev = prev.clash-verge-rev.overrideAttrs (oldAttrs: rec {

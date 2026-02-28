@@ -28,7 +28,9 @@
     stateVersion = "25.11";
     # 根据你的需求添加用户专属软件包：
     packages = with pkgs; [
-      clash-verge-rev
+      # clash-verge-rev
+      pkgs.sparkle
+      pkgs.notion-app-enhanced
       google-chrome
       steam
       lazygit
@@ -37,20 +39,6 @@
       inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
       # 硬件监控工具包
       lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
-      (pkgs.sparkle.overrideAttrs (oldAttrs: {
-        postFixup = (oldAttrs.postFixup or "") + ''
-          echo "正在替换 Sparkle 内核..."
-          
-          # 目标路径（根据之前的 ps 输出）
-          TARGET="$out/opt/sparkle/resources/sidecar/mihomo"
-          
-          # 1. 删除自带内核
-          rm -f "$TARGET"
-          
-          # 2. 链接到系统 Wrapper
-          ln -s /run/wrappers/bin/mihomo "$TARGET"
-        '';
-      }))
     ];
   };
 
