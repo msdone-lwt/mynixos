@@ -19,6 +19,7 @@
     # ./nvim.nix
     ./git.nix
     ./fcitx5.nix
+    ./zsh.nix
   ];
 
   home = {
@@ -32,6 +33,7 @@
       # clash-verge-rev
       pkgs.sparkle
       pkgs.wechat
+      pkgs.cryptomator
       google-chrome
       steam
       lazygit

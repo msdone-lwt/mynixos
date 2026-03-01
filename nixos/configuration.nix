@@ -215,6 +215,7 @@ in
     description = "msdone";
     # 确保添加你需要的任何其他组（如 networkmanager, audio, docker 等）
     extraGroups = [ "networkmanager" "wheel" ];
+    shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       # 如果你打算使用 SSH 连接，请在这里添加你的 SSH 公钥
     ];
@@ -239,6 +240,7 @@ in
       };
     };
   };
+  programs.zsh.enable = true;
 
   # 11: ssh
   # 这里设置 SSH 服务器。如果你正在设置无头系统（服务器），这非常重要。
