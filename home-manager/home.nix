@@ -18,6 +18,7 @@
     # 你也可以将配置拆分并在这里导入片段：
     # ./nvim.nix
     ./git.nix
+    ./fcitx5.nix
   ];
 
   home = {

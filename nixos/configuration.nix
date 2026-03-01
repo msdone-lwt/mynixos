@@ -123,6 +123,7 @@ in
       fcitx5-gtk
       fcitx5-lua
       fcitx5-pinyin-zhwiki
+      fcitx5-material-color  # 包含暗黑主题 Material-Color-Black
     ];
   };
 
