@@ -8,7 +8,7 @@
   # 5. hm 定义软件配置, git 的作者邮箱等 ✅
   # 6. gnome 配置 fira code 字体 ✅
   # 7. hm配置 pinyin,nvim、lazygit、git、zsh、tmux、alactirry、google
-  # 8. rebuild alias: cd /etc/nixos && sudo git add . && sudo nix flake update && sudo nixos-rebuild switch --flake .#nixos-msdone
+  # 8. rebuild alias: cd /etc/nixos && sudo git add . && sudo nix flake update && sudo nixos-rebuild switch --flake .#nixos-msdone   # sudo nix-collect-garbage -d 删除旧生成   # nix-store --optimise   删除重复文件
   # 9. https://github.com/IvanoiuAlexandruPaul/MSI-Dragon-Center-for-Linux/blob/main/README.md ✅
 
   inputs = {

@@ -17,6 +17,7 @@ let
   myFont = "FiraCode Nerd Font";
   myMonoFont = "FiraCode Nerd Font Mono";
   myFontSize = "12";
+  mySansFont = "Adwaita Sans";
 in
 {
   # 你可以在这里导入其他的 NixOS 模块
@@ -135,7 +136,7 @@ in
       enable = true;
       defaultFonts = {
 	monospace = [ "${myMonoFont}" ];
-        sansSerif = [ "${myFont}" ];
+        sansSerif = [ "${mySansFont}" ];
         serif     = [ "${myFont}" ];
         emoji     = [ "${myFont}" ];
       };

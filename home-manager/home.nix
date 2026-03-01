@@ -30,6 +30,7 @@
     packages = with pkgs; [
       # clash-verge-rev
       pkgs.sparkle
+      pkgs.wechat
       google-chrome
       steam
       lazygit
