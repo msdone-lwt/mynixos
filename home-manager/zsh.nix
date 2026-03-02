@@ -25,6 +25,7 @@
       rebuild = "sudo git -C /etc/nixos add . && sudo nixos-rebuild switch --flake /etc/nixos#nixos-msdone";
       deletegen = "sudo nix-collect-garbage -d";
       optimise = "nix-store --optimise";
+      listfd = "sysctl fs.file-nr";
     };
 
     oh-my-zsh = {
