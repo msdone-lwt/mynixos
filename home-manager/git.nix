@@ -15,6 +15,9 @@
         name = "msdone";
 	email = "lwt6077@gmail.com";
       };
+      credential = {
+	helper = "store";
+      };
       safe = {
         directory = "/etc/nixos";
       };
