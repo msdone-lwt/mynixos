@@ -69,10 +69,6 @@ in
       source = ./tmux/custom/toggle_synchronize.sh;
       executable = true;
     };
-    "tmux/custom/zentao.sh" = {
-      source = ./tmux/custom/zentao.sh;
-      executable = true;
-    };
   };
 
   # 5. 确保脚本运行所需的依赖包已安装
