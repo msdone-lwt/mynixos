@@ -20,6 +20,7 @@
     ./git.nix
     ./fcitx5.nix
     ./zsh.nix
+    ./tmux.nix
   ];
 
   home = {
@@ -34,6 +35,7 @@
       pkgs.sparkle
       pkgs.wechat
       pkgs.cryptomator
+      pkgs.tmux
       google-chrome
       steam
       lazygit
