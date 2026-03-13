@@ -21,6 +21,7 @@
     ./fcitx5.nix
     ./zsh.nix
     ./tmux.nix
+    ./ghostty.nix
   ];
 
   home = {
