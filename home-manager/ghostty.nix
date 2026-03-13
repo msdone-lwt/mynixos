@@ -20,7 +20,7 @@
       window-decoration = false;
       window-step-resize = true;
       maximize = true;
-      mouse-hide-while-typing = true;
+      mouse-hide-while-typing = false;
       copy-on-select = true;
       right-click-action = "copy-or-paste";
     };
