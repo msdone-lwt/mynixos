@@ -94,6 +94,7 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.firewall.trustedInterfaces = [ "mihomo" ];
   
   # 3: Time zone
   # Set your time zone.
