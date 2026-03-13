@@ -2,4 +2,5 @@
 # 你可以使用 'nix build .#example' 来构建它们
 pkgs: {
   # example = pkgs.callPackage ./example { };
+  nextai-translator = pkgs.callPackage ./nextai-translator { };
 }

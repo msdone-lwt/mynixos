@@ -37,6 +37,7 @@
       pkgs.wechat
       pkgs.cryptomator
       pkgs.tmux
+      nextai-translator
       google-chrome
       steam
       lazygit
