@@ -1,0 +1,83 @@
+{
+  "mcpServers": {
+    "amap-maps": {
+      "args": [
+        "-y",
+        "@amap/amap-maps-mcp-server"
+      ],
+      "command": "npx",
+      "description": "MCP server for using the AMap Maps API.(install by <npm install -g @amap/amap-maps-mcp-server>)",
+      "disabled": true,
+      "env": {
+        "AMAP_MAPS_API_KEY": ""
+      },
+      "name": "amap-maps"
+    },
+    "github.com/modelcontextprotocol/servers/tree/main/src/git": {
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "/home/msdone/.config/astronvim5"
+      ],
+      "command": "uvx",
+      "description": "A Model Context Protocol server for Git repository interaction and automation",
+      "disabled": true,
+      "name": "Git Tools"
+    },
+    "mcp-git-ingest": {
+      "args": [
+        "--from",
+        "git+https://github.com/adhikasp/mcp-git-ingest",
+        "mcp-git-ingest"
+      ],
+      "command": "uvx",
+      "disabled": true,
+      "name": "mcp-git-ingest"
+    },
+    "mcp=hfspace": {
+      "args": [
+        "-y",
+        "@llmindset/mcp-hfspace"
+      ],
+      "command": "npx",
+      "disabled": true
+    },
+    "notion-mcp-server": {
+      "args": [
+        "-y",
+        "@orbit-logistics/notion-mcp-server",
+        "-t",
+        "$NOTION_INTEGRATION_TOKEN"
+      ],
+      "command": "npx",
+      "description": "MCP server for Notion integration.(install by <npm install -g @orbit-logistics/notion-mcp-server>)",
+      "disabled": true,
+      "name": "notion-mcp-server"
+    },
+    "readModule": {
+      "args": [
+        "readmodule"
+      ],
+      "command": "uvx",
+      "description": "MCP server for reading modules from a local directory",
+      "disabled": true,
+      "name": "OpenHarmony project read module"
+    }
+  },
+  "nativeMCPServers": {
+    "mcphub": {
+      "disabled": true,
+      "disabled_prompts": [
+        "create_native_server"
+      ],
+      "disabled_resources": [
+        "mcphub://docs",
+        "mcphub://native_server_guide",
+        "mcphub://changelog"
+      ]
+    },
+    "neovim": {
+      "disabled": true
+    }
+  }
+}

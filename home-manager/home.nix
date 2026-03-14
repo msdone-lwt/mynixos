@@ -22,6 +22,7 @@
     ./zsh.nix
     ./tmux.nix
     ./ghostty.nix
+    ./nvim.nix
   ];
 
   home = {
@@ -46,16 +47,36 @@
       # 硬件监控工具包
       lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
       # nextai-translator
+      # node
       nodejs_24
+      nodePackages.typescript  # tsc
+      # python
+      python315
+      uv
+      # lua
+      lua
+      # nvim
       ripgrep
       gdu
       bottom
-      python315
+      fd
+      unzip
+      # xclip   # 剪贴板支持 (Linux X11)
+      wl-clipboard # 剪贴板支持 (Wayland)
+      gcc
+      gnumake
+      pkg-config
+      openssl.dev
+      # tmux
+      jq
+      gnused
+      bc
+      # rust
       cargo
       rustc
-      rustfmt
       clippy
-      rust-analyzer
+      # rust-analyzer
+      # rustfmt
     ];
   };
 

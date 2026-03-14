@@ -70,14 +70,4 @@ in
       executable = true;
     };
   };
-
-  # 5. 确保脚本运行所需的依赖包已安装
-  home.packages = with pkgs; [
-    jq      # zentao.sh 需要
-    curl    # zentao.sh 需要
-    gnused  # sed
-    bc      # 某些 tmux 脚本可能需要计算
-    xclip   # 剪贴板支持 (Linux X11)
-    wl-clipboard # 剪贴板支持 (Wayland)
-  ];
 }
