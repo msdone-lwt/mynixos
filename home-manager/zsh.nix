@@ -1,4 +1,4 @@
-{ 
+{
   pkgs,
   config,
   lib,
@@ -21,8 +21,8 @@
       ".." = "cd ..";
       "..." = "cd ../..";
       avante = "nvim -c \"lua vim.defer_fn(function()require(\\\"avante.api\\\").zen_mode()end, 100)\"";
-      updaterebuild = "git -C /home/msdone/mynixos add . && sudo nix flake update && sudo nixos-rebuild switch --flake /home/msdone/mynixos#nixos-msdone";
-      rebuild = "git -C /home/msdone/mynixos add . && sudo nixos-rebuild switch --flake /home/msdone/mynixos#nixos-msdone";
+      updaterebuild = "git -C ${config.home.homeDirectory}/mynixos add . && sudo nix flake update && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/mynixos#nixos-msdone";
+      rebuild = "git -C ${config.home.homeDirectory}/mynixos add . && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/mynixos#nixos-msdone";
       deletegen = "sudo nix-collect-garbage -d";
       optimise = "nix-store --optimise";
       listfd = "sysctl fs.file-nr";
@@ -38,7 +38,7 @@
     };
 
     initContent = lib.mkMerge [
-      ( lib.mkBefore ''
+      (lib.mkBefore ''
         # Enable Powerlevel10k instant prompt.
         if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
           source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
@@ -47,29 +47,29 @@
         export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
       '')
       (lib.mkAfter ''
-        # --- 敏感数据加载 ---
-        if [ -f "$HOME/.zshrc.private" ]; then
-          source "$HOME/.zshrc.private"
-        fi
+         # --- 敏感数据加载 ---
+         if [ -f "$HOME/.zshrc.private" ]; then
+         source "$HOME/.zshrc.private"
+         fi
 
-        # --- 自定义函数 hilog ---
-        hilog() {
-          local cmd="hdc.exe shell hilog -v color | grep"
-          for pattern in "$@"; do
-              cmd+=" -e $pattern"
-          done
-          eval "$cmd"
-        }
+         # --- 自定义函数 hilog ---
+         hilog() {
+           local cmd="hdc.exe shell hilog -v color | grep"
+           for pattern in "$@"; do
+             cmd+=" -e $pattern"
+             done
+             eval "$cmd"
+         }
 
-	# --- zsh-vi-mode 自定义按键映射 ---
-	function zvm_after_init() {
-          zvm_bindkey vicmd 'H' vi-beginning-of-line
-          zvm_bindkey vicmd 'L' vi-end-of-line
-          zvm_bindkey visual 'H' vi-beginning-of-line
-          zvm_bindkey visual 'L' vi-end-of-line
-        }
+        	# --- zsh-vi-mode 自定义按键映射 ---
+        	function zvm_after_init() {
+           zvm_bindkey vicmd 'H' vi-beginning-of-line
+           zvm_bindkey vicmd 'L' vi-end-of-line
+           zvm_bindkey visual 'H' vi-beginning-of-line
+           zvm_bindkey visual 'L' vi-end-of-line
+         }
 
-        [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+         [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
       '')
     ];
 
