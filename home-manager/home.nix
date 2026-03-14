@@ -33,11 +33,10 @@
     # 根据你的需求添加用户专属软件包：
     packages = with pkgs; [
       # clash-verge-rev
-      pkgs.sparkle
-      pkgs.wechat
-      pkgs.cryptomator
-      pkgs.tmux
-      nextai-translator
+      sparkle
+      wechat
+      cryptomator
+      tmux
       google-chrome
       steam
       lazygit
@@ -46,6 +45,17 @@
       inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
       # 硬件监控工具包
       lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
+      # nextai-translator
+      nodejs_24
+      ripgrep
+      gdu
+      bottom
+      python315
+      cargo
+      rustc
+      rustfmt
+      clippy
+      rust-analyzer
     ];
   };
 
