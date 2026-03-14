@@ -21,8 +21,8 @@
       ".." = "cd ..";
       "..." = "cd ../..";
       avante = "nvim -c \"lua vim.defer_fn(function()require(\\\"avante.api\\\").zen_mode()end, 100)\"";
-      updaterebuild = "sudo git -C /etc/nixos add . && sudo nix flake update && sudo nixos-rebuild switch --flake /etc/nixos#nixos-msdone";
-      rebuild = "sudo git -C /etc/nixos add . && sudo nixos-rebuild switch --flake /etc/nixos#nixos-msdone";
+      updaterebuild = "git -C /home/msdone/mynixos add . && sudo nix flake update && sudo nixos-rebuild switch --flake /home/msdone/mynixos#nixos-msdone";
+      rebuild = "git -C /home/msdone/mynixos add . && sudo nixos-rebuild switch --flake /home/msdone/mynixos#nixos-msdone";
       deletegen = "sudo nix-collect-garbage -d";
       optimise = "nix-store --optimise";
       listfd = "sysctl fs.file-nr";
