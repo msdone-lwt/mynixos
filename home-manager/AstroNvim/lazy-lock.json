@@ -83,7 +83,6 @@
   "rustaceanvim": { "branch": "master", "commit": "88575b98bb9937fb9983ddec5e532b67e75ce677" },
   "schemastore.nvim": { "branch": "main", "commit": "157fa3f37a3be55ceb375274e2f3ea2d7d2f9ef6" },
   "smart-splits.nvim": { "branch": "master", "commit": "ddb23c1a1cf1507bda487cda7f6e4690965ef9f5" },
-  "smear-cursor.nvim": { "branch": "main", "commit": "ed64b7decb25e3db11befa0b76adc9073a3688b5" },
   "snacks.nvim": { "branch": "main", "commit": "a4e46becca45eb65c73a388634b1ce8aad629ae0" },
   "solarized-osaka.nvim": { "branch": "main", "commit": "f796014c14b1910e08d42cc2077fef34f08e0295" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "6fea601bd2b694c6f2ae08a6c6fab14930c60e2c" },
