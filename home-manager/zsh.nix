@@ -45,6 +45,7 @@
         fi
 
         export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+        bindkey -r '^l'
       '')
       (lib.mkAfter ''
          # --- 敏感数据加载 ---
