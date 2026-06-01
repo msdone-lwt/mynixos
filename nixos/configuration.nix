@@ -2,7 +2,6 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-
 # 这是你的系统配置文件。
 # 使用此文件配置你的系统环境（它替代了 /etc/nixos/configuration.nix）
 {
@@ -61,23 +60,25 @@ in
     };
   };
 
-  nix = let
-    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
-  in {
-    settings = {
-      # 启用实验性功能: flakes 功能和新的 'nix' 命令
-      experimental-features = "nix-command flakes";
-      # 偏好设置：禁用全局注册表
-      flake-registry = "";
-      # 针对 https://github.com/NixOS/nix/issues/9574 的权宜之计
-      nix-path = config.nix.nixPath;
+  nix =
+    let
+      flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+    in
+    {
+      settings = {
+        # 启用实验性功能: flakes 功能和新的 'nix' 命令
+        experimental-features = "nix-command flakes";
+        # 偏好设置：禁用全局注册表
+        flake-registry = "";
+        # 针对 https://github.com/NixOS/nix/issues/9574 的权宜之计
+        nix-path = config.nix.nixPath;
+      };
+      # 偏好设置：禁用 channel (渠道)
+      channel.enable = false;
+      # 偏好设置：使 flake 注册表和 nix path 与 flake 输入匹配
+      registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
+      nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     };
-    # 偏好设置：禁用 channel (渠道)
-    channel.enable = false;
-    # 偏好设置：使 flake 注册表和 nix path 与 flake 输入匹配
-    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
-    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
-  };
 
   # 1: Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -96,7 +97,7 @@ in
   # Enable networking
   networking.networkmanager.enable = true;
   networking.firewall.trustedInterfaces = [ "mihomo" ];
-  
+
   # 3: Time zone
   # Set your time zone.
   time.timeZone = "Asia/Shanghai";
@@ -120,12 +121,12 @@ in
     enable = true;
     type = "fcitx5";
     fcitx5.addons = with pkgs; [
-      qt6Packages.fcitx5-with-addons 
+      qt6Packages.fcitx5-with-addons
       qt6Packages.fcitx5-chinese-addons # pinyin
       fcitx5-gtk
       fcitx5-lua
       fcitx5-pinyin-zhwiki
-      fcitx5-material-color  # 包含暗黑主题 Material-Color-Black
+      fcitx5-material-color # 包含暗黑主题 Material-Color-Black
     ];
   };
 
@@ -135,23 +136,44 @@ in
       # nredfont
       nerd-fonts.jetbrains-mono
       nerd-fonts.fira-code
-    ];     
+    ];
     fontconfig = {
       enable = true;
       defaultFonts = {
-	monospace = [ "${myMonoFont}" ];
+        monospace = [ "${myMonoFont}" ];
         sansSerif = [ "${mySansFont}" ];
-        serif     = [ "${myFont}" ];
-        emoji     = [ "${myFont}" ];
+        serif = [ "${myFont}" ];
+        emoji = [ "${myFont}" ];
       };
     };
   };
   # 6: Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  services.xserver = {      
+  # 启用显卡驱动支持
+  services.xserver.videoDrivers = [
+    "amdgpu"
+    "nvidia"
+  ];
+  hardware.nvidia = {
+    # 必须开启，解决很多现代 Wayland 桌面下的画面撕裂问题
+    modesetting.enable = true;
+    # 强烈建议设为 false，使用官方闭源驱动以保证游戏性能
+    open = false;
+    # 安装 nvidia-settings 控制面板
+    nvidiaSettings = true;
+    # 选择驱动版本，production 通常是最稳定的
+    package = config.boot.kernelPackages.nvidiaPackages.production;
+  };
+  # 英伟达显卡的动态链接库
+  devShells.x86_64-linux.default = pkgs.mkShell {
+    shellHook = ''
+      export LD_LIBRARY_PATH=/run/opengl-driver/lib:$LD_LIBRARY_PATH
+    '';
+  };
+  services.xserver = {
     # Enable the X11 window ing system.
-    enable = true;          
+    enable = true;
     # Configure keymap in X11
     xkb = {
       layout = "cn";
@@ -218,7 +240,10 @@ in
     isNormalUser = true;
     description = "msdone";
     # 确保添加你需要的任何其他组（如 networkmanager, audio, docker 等）
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       # 如果你打算使用 SSH 连接，请在这里添加你的 SSH 公钥
@@ -271,7 +296,6 @@ in
     source = "${pkgs.mihomo}/bin/mihomo";
   };
   # boot.kernelModules = [ "tun" ];
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

@@ -76,6 +76,10 @@
       clippy
       # rust-analyzer
       # rustfmt
+      # NOTE: hardware info
+      cpu-x
+      hardinfo2
+      gpu-viewer
     ];
   };
 
