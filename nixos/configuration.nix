@@ -82,6 +82,7 @@ in
   # 1: Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; # UEFI
+  # boot.supportedFilesystems = [ "ntfs" ];
   # boot.kernelPackages = pkgs.linuxPackages_latest; # 使用最新的linux 内核
 
   # 2: Network
@@ -175,6 +176,7 @@ in
   # 7: 系统级软件包与程序
   programs.firefox.enable = false;
   programs.nano.enable = false;
+  programs.steam.enable = true;
   # 启用 CoolerControl 守护进程和图形界面
   programs.coolercontrol.enable = true;
   programs.nix-ld.enable = true;
