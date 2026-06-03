@@ -12,8 +12,6 @@
   stdenv,
   pkg-config,
   vips,
-  gsettings-desktop-schemas,
-  fontconfig,
 }:
 stdenv.mkDerivation rec {
   pname = "folo";
@@ -45,7 +43,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-uj7xyh+U4OHn6J+jhoPaEOYwOLinRAj5CbWZYPgG6zI=";
   };
 
-  # 强制限制并发，彻底解决沙盒内 tmpfs 目录重命名冲突
+  # 🌟 核心防沙盒崩溃护盾：严格限制单线程链接，彻底消灭 _tmp_ 重命名冲突！
   pnpmFlags = [
     "--filter=./apps/desktop..."
     "--filter=./packages/..."
@@ -109,12 +107,11 @@ stdenv.mkDerivation rec {
     cp -r . $out/share/follow
     rm -rf $out/share/follow/{.vscode,.github}
 
+    # 🌟 恢复纯净 Wrapper：不硬编码系统级环境变量，让应用自然读取你系统的中文配置
     makeWrapper "${electron}/bin/electron" "$out/bin/follow" \
       --inherit-argv0 \
       --add-flags $out/share/follow/apps/desktop \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
-      --set FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D "${desktopItem}/share/applications/"* \
         -t $out/share/applications/

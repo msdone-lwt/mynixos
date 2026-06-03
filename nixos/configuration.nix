@@ -136,14 +136,29 @@ in
       # nredfont
       nerd-fonts.jetbrains-mono
       nerd-fonts.fira-code
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+      noto-fonts-color-emoji
     ];
     fontconfig = {
       enable = true;
       defaultFonts = {
-        monospace = [ "${myMonoFont}" ];
-        sansSerif = [ "${mySansFont}" ];
-        serif = [ "${myFont}" ];
-        emoji = [ "${myFont}" ];
+        monospace = [
+          "${myMonoFont}"
+          "Noto Sans CJK SC"
+        ];
+        sansSerif = [
+          "${mySansFont}"
+          "Noto Sans CJK SC"
+        ];
+        serif = [
+          "${myFont}"
+          "Noto Serif CJK SC"
+        ];
+        emoji = [
+          "Noto Color Emoji"
+          "${myFont}"
+        ];
       };
     };
   };
