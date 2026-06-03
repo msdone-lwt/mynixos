@@ -22,9 +22,12 @@
       maximize = true;
       mouse-hide-while-typing = false;
       copy-on-select = true;
-      right-click-action = "copy-or-paste";
+      # right-click-action = "copy-or-paste";
       custom-shader = "${./ghostty/cursor_warp.glsl}";  # https://github.com/sahaj-b/ghostty-cursor-shaders
       custom-shader-animation = true;
+      keybind = [
+        "ctrl+shift+v=paste_from_clipboard"
+      ];
     };
     themes = {
       catppuccin-mocha = {
