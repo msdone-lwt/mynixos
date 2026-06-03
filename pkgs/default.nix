@@ -3,4 +3,5 @@
 pkgs: {
   # example = pkgs.callPackage ./example { };
   nextai-translator = pkgs.callPackage ./nextai-translator { };
+  new-folo = pkgs.callPackage ./new-folo { };
 }

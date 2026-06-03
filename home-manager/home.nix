@@ -35,6 +35,7 @@
     packages = with pkgs; [
       # clash-verge-rev
       sparkle
+      new-folo
       wechat
       cryptomator
       tmux
