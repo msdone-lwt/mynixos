@@ -36,6 +36,7 @@
       # clash-verge-rev
       sparkle
       wechat
+      folo
       cryptomator
       tmux
       google-chrome

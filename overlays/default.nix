@@ -22,6 +22,77 @@
         ln -s /run/wrappers/bin/mihomo "$target"
       '';
     });
+    # 解决 folo 版本过低的问题
+    folo = prev.folo.overrideAttrs (oldAttrs: rec {
+      # 1. 修改为你想要的最新版本号
+      version = "1.9.0";
+
+      # 2. 覆盖源码来源 (src) 和它的 Hash
+      src = prev.fetchFromGitHub {
+        owner = "RSSNext";
+        repo = "Folo";
+        tag = "desktop/v${version}";
+        hash = "sha256-VrKWqqXzdEOfl8E069eZCeI5agxWKmRMW6ziGqURuHc=";
+      };
+
+      # 3. 【极其关键】覆盖 pnpm 依赖的 Hash！
+      # 因为版本变了，package.json 肯定变了，依赖树也会变
+      pnpmDeps = prev.fetchPnpmDeps {
+        inherit (oldAttrs) pname;
+        inherit version src;
+        fetcherVersion = 3;
+        hash = "sha256-uj7xyh+U4OHn6J+jhoPaEOYwOLinRAj5CbWZYPgG6zI=";
+      };
+      # ==============================================================
+      # 🌟 唯一成功过的护盾参数：只降并发、只过滤工作区，绝对不加 copy
+      # ==============================================================
+      pnpmFlags = [
+        "--filter=./apps/desktop..."
+        "--filter=./packages/..."
+        "--child-concurrency=1"
+        "--network-concurrency=1"
+      ];
+
+      nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ prev.pkg-config ];
+      buildInputs = (oldAttrs.buildInputs or [ ]) ++ [ prev.vips ];
+
+      # ==============================================================
+      # 🌐 网络与后端 API 修复 (替换旧域名)
+      # ==============================================================
+      env = (oldAttrs.env or { }) // {
+        SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
+
+        VITE_WEB_URL = "https://app.folo.is";
+        VITE_API_URL = "https://api.folo.is";
+        VITE_OPENPANEL_API_URL = "https://openpanel.folo.is/api";
+
+        VITE_FIREBASE_CONFIG = builtins.toJSON {
+          apiKey = "AIzaSyBpGB2C2Vz-9ktivqVkW7uTtVopNh3ELvo";
+          authDomain = "diygod-folo.firebaseapp.com";
+          projectId = "diygod-folo";
+          storageBucket = "diygod-folo.firebasestorage.app";
+          messagingSenderId = "992336953943";
+          appId = "1:992336953943:web:998aae576c8bc77dc11912";
+          measurementId = "G-HS4SF4GHWG";
+        };
+      };
+
+      # ==============================================================
+      # 🎨 UI 排版与字体修复 (保留 --no-inline-css)
+      # ==============================================================
+      buildPhase = ''
+        runHook preBuild
+        pnpm run build:packages
+        cd apps/desktop
+
+        pnpm --offline --no-inline-css build:electron-vite
+
+        cd ../..
+        CI=true pnpm --ignore-scripts prune --prod
+        find node_modules/.bin -xtype l -delete
+        runHook postBuild
+      '';
+    });
     # 覆盖 clash-verge-rev 软件包
     # FIXME: 更新版本或者使用 nixpkgs 官方包
     clash-verge-rev = prev.clash-verge-rev.overrideAttrs (oldAttrs: rec {
