@@ -150,27 +150,6 @@ in
   # 6: Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  # 启用显卡驱动支持
-  services.xserver.videoDrivers = [
-    "amdgpu"
-    "nvidia"
-  ];
-  hardware.nvidia = {
-    # 必须开启，解决很多现代 Wayland 桌面下的画面撕裂问题
-    modesetting.enable = true;
-    # 强烈建议设为 false，使用官方闭源驱动以保证游戏性能
-    open = false;
-    # 安装 nvidia-settings 控制面板
-    nvidiaSettings = true;
-    # 选择驱动版本，production 通常是最稳定的
-    package = config.boot.kernelPackages.nvidiaPackages.production;
-  };
-  # 英伟达显卡的动态链接库
-  devShells.x86_64-linux.default = pkgs.mkShell {
-    shellHook = ''
-      export LD_LIBRARY_PATH=/run/opengl-driver/lib:$LD_LIBRARY_PATH
-    '';
-  };
   services.xserver = {
     # Enable the X11 window ing system.
     enable = true;

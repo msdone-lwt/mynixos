@@ -13,6 +13,21 @@
   boot.blacklistedKernelModules = [ "nct6683" ];
   boot.kernelModules = [ "kvm-amd" "nct6687" ]; # nct6683 为 MSI 主板内核驱动，通过 sudo sensors-detect 查找
   boot.extraModulePackages = [ config.boot.kernelPackages.nct6687d ];
+  # 启用显卡驱动支持
+  services.xserver.videoDrivers = [
+    "amdgpu"
+    "nvidia"
+  ];
+  hardware.nvidia = {
+    # 必须开启，解决很多现代 Wayland 桌面下的画面撕裂问题
+    modesetting.enable = true;
+    # 强烈建议设为 false，使用官方闭源驱动以保证游戏性能
+    open = false;
+    # 安装 nvidia-settings 控制面板
+    nvidiaSettings = true;
+    # 选择驱动版本，production 通常是最稳定的
+    package = config.boot.kernelPackages.nvidiaPackages.production;
+  };
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/a82da222-59e9-482f-8ee4-99faacad8f78";

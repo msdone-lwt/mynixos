@@ -25,77 +25,87 @@
     ghostty.url = "github:ghostty-org/ghostty";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    # 你的 flake 软件包、shell 等支持的系统架构。
-    systems = [
-      "aarch64-linux"
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    # 这是一个辅助函数，通过为你传递给它的函数提供每个系统架构作为参数来生成属性。
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    # 你的自定义软件包
-    # 可通过 'nix build', 'nix shell' 等命令访问
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    
-    # 你的 nix 文件格式化工具，可通过 'nix fmt' 访问
-    # 除了 'alejandra'，其他选项还包括 'nixpkgs-fmt'
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      # 你的 flake 软件包、shell 等支持的系统架构。
+      systems = [
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      # 这是一个辅助函数，通过为你传递给它的函数提供每个系统架构作为参数来生成属性。
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      # 你的自定义软件包
+      # 可通过 'nix build', 'nix shell' 等命令访问
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
-    # 你的自定义软件包和修改，作为覆盖层 (Overlays) 导出
-    overlays = import ./overlays {inherit inputs;};
-    
-    # 你可能想要导出的可重用 nixos 模块
-    # 这些通常是你想要提交到 nixpkgs 官方仓库的内容
-    nixosModules = import ./modules/nixos;
-    
-    # 你可能想要导出的可重用 home-manager 模块
-    # 这些通常是你想要提交到 home-manager 官方仓库的内容
-    homeManagerModules = import ./modules/home-manager;
+      # 你的 nix 文件格式化工具，可通过 'nix fmt' 访问
+      # 除了 'alejandra'，其他选项还包括 'nixpkgs-fmt'
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    # NixOS 配置入口点
-    # 可通过 'nixos-rebuild --flake .#your-hostname' 使用
-    nixosConfigurations = {
-      # 替换为你自己的主机名 (hostname)
-      nixos-msdone = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs;};
-        modules = [
-          # > nixos 配置文件 <
-          ./nixos/configuration.nix
-	  # 集成 home-manager 配置: 导入 Home Manager NixOS 模块
-	  home-manager.nixosModules.home-manager
+      # 你的自定义软件包和修改，作为覆盖层 (Overlays) 导出
+      overlays = import ./overlays { inherit inputs; };
+
+      # 你可能想要导出的可重用 nixos 模块
+      # 这些通常是你想要提交到 nixpkgs 官方仓库的内容
+      nixosModules = import ./modules/nixos;
+
+      # 你可能想要导出的可重用 home-manager 模块
+      # 这些通常是你想要提交到 home-manager 官方仓库的内容
+      homeManagerModules = import ./modules/home-manager;
+
+      # NixOS 配置入口点
+      # 可通过 'nixos-rebuild --flake .#your-hostname' 使用
+      nixosConfigurations = {
+        # 替换为你自己的主机名 (hostname)
+        nixos-msdone = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            # > nixos 配置文件 <
+            ./nixos/configuration.nix
+            # 集成 home-manager 配置: 导入 Home Manager NixOS 模块
+            home-manager.nixosModules.home-manager
             {
-	      home-manager.useGlobalPkgs = true;   # 使用系统级的 nixpkgs 实例
-	      home-manager.useUserPackages = true; # 软件包安装到用户的 profile 中
+              home-manager.useGlobalPkgs = true; # 使用系统级的 nixpkgs 实例
+              home-manager.useUserPackages = true; # 软件包安装到用户的 profile 中
               home-manager.extraSpecialArgs = { inherit inputs; }; # 传递参数给 home.nix
-	      # 关联你的用户名和配置文件
-	      home-manager.users.msdone = import ./home-manager/home.nix;
+              # 关联你的用户名和配置文件
+              home-manager.users.msdone = import ./home-manager/home.nix;
             }
-        ];
+          ];
+        };
       };
-    };
 
-    # 独立的 home-manager 配置入口点
-    # 可通过 'home-manager --flake .#your-username@your-hostname' 使用
-    # homeConfigurations = {
-    #   # 替换为你的 用户名@主机名
-    #   "msdone@nixos-msdone" = home-manager.lib.homeManagerConfiguration {
-    #     # Home-manager 需要 'pkgs' 实例 根据你的架构替换 x86_64-linux
-    #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    #     extraSpecialArgs = {inherit inputs;};
-    #     modules = [
-    #       # > home-manager 配置文件 <
-    #       ./home-manager/home.nix
-    #     ];
-    #   };
-    # };
-  };
+      devShells.x86_64-linux.default = nixpkgs.mkShell {
+        # 英伟达显卡的动态链接库
+        shellHook = ''
+          export LD_LIBRARY_PATH=/run/opengl-driver/lib:$LD_LIBRARY_PATH
+        '';
+      };
+
+      # 独立的 home-manager 配置入口点
+      # 可通过 'home-manager --flake .#your-username@your-hostname' 使用
+      # homeConfigurations = {
+      #   # 替换为你的 用户名@主机名
+      #   "msdone@nixos-msdone" = home-manager.lib.homeManagerConfiguration {
+      #     # Home-manager 需要 'pkgs' 实例 根据你的架构替换 x86_64-linux
+      #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      #     extraSpecialArgs = {inherit inputs;};
+      #     modules = [
+      #       # > home-manager 配置文件 <
+      #       ./home-manager/home.nix
+      #     ];
+      #   };
+      # };
+    };
 }
