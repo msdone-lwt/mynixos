@@ -45,10 +45,28 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    alsa-lib at-spi2-atk cairo cups dbus expat glib gtk3
-    libGL libgbm libxkbcommon nspr nss pango udev
-    xorg.libX11 xorg.libXcomposite xorg.libXdamage xorg.libXext
-    xorg.libXfixes xorg.libXrandr xorg.libxcb
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    glib
+    gtk3
+    libGL
+    libgbm
+    libxkbcommon
+    nspr
+    nss
+    pango
+    udev
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
+    xorg.libxcb
     (lib.getLib stdenv.cc.cc)
     e2fsprogs
     xdotool
