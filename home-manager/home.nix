@@ -35,7 +35,7 @@
     packages = with pkgs; [
       # clash-verge-rev
       sparkle
-      # new-folo
+      new-folo
       # any-listen
       wechat
       cryptomator

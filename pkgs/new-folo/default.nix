@@ -6,12 +6,10 @@
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  pnpm,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenv,
-  pkg-config,
-  vips,
 }:
 stdenv.mkDerivation rec {
   pname = "folo";
@@ -26,35 +24,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm
     pnpmConfigHook
+    pnpm_10_29_2
     makeWrapper
     imagemagick
-    pkg-config
-  ];
-
-  buildInputs = [
-    vips
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
     hash = "sha256-uj7xyh+U4OHn6J+jhoPaEOYwOLinRAj5CbWZYPgG6zI=";
   };
 
-  # 🌟 核心防沙盒崩溃护盾：严格限制单线程链接，彻底消灭 _tmp_ 重命名冲突！
-  pnpmFlags = [
-    "--filter=./apps/desktop..."
-    "--filter=./packages/..."
-    "--ignore-scripts"
-    "--child-concurrency=1"
-    "--network-concurrency=1"
-  ];
-
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-    SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
 
     VITE_WEB_URL = "https://app.folo.is";
     VITE_API_URL = "https://api.folo.is";
@@ -90,11 +78,14 @@ stdenv.mkDerivation rec {
 
     pnpm run build:packages
 
+    # Build desktop app.
     cd apps/desktop
     pnpm --offline --no-inline-css build:electron-vite
     cd ../..
 
+    # Remove dev dependencies.
     CI=true pnpm --ignore-scripts prune --prod
+    # Clean up broken symlinks left behind by `pnpm prune`
     find node_modules/.bin -xtype l -delete
 
     runHook postBuild
@@ -107,7 +98,6 @@ stdenv.mkDerivation rec {
     cp -r . $out/share/follow
     rm -rf $out/share/follow/{.vscode,.github}
 
-    # 🌟 恢复纯净 Wrapper：不硬编码系统级环境变量，让应用自然读取你系统的中文配置
     makeWrapper "${electron}/bin/electron" "$out/bin/follow" \
       --inherit-argv0 \
       --add-flags $out/share/follow/apps/desktop \
