@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- Customize Mason
 
@@ -11,18 +11,29 @@ return {
     opts = {
       -- Make sure to use the names found in `:Mason`
       ensure_installed = {
-        -- install language servers
-        "lua-language-server",
-
-        -- install formatters
+        "ruff",
         "stylua",
-
-        -- install debuggers
+        "clangd",
+        "selene",
+        "nixfmt",
+        "neocmakelsp",
+        "basedpyright",
+        "lua-language-server",
+        "deno",
+        "js-debug-adapter",
+        "codelldb",
         "debugpy",
-
-        -- install any other package
-        "tree-sitter-cli",
+        "black",
+        "copilot-language-server",
+        "isort",
+        "json-lsp",
+        "marksman",
+        "nil",
+        "taplo",
+        "vtsls",
       },
+      -- 启动时自动安装缺失的工具
+      run_on_start = true,
     },
   },
 }

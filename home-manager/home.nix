@@ -45,6 +45,8 @@
       fastfetch
       # ghostty flake, pkgs.stdenv.hostPlatform.system 会自动匹配你的系统架构（如 x86_64-linux）
       inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # mcp-hub
+      inputs.mcp-hub.packages.${pkgs.stdenv.hostPlatform.system}.default
       # 硬件监控工具包
       lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
       # nextai-translator
@@ -65,6 +67,7 @@
       claude-code
       codex
       opencode
+      codex-acp
       # xclip   # 剪贴板支持 (Linux X11)
       wl-clipboard # 剪贴板支持 (Wayland)
       gcc

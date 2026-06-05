@@ -325,7 +325,7 @@ return {
           ["p"] = { "pgvy", desc = "paste" },
           ["L"] = { "$h" },
           ["H"] = { "^" },
-          ["<Leader>a"] = { name = "🤖 Avante" }, -- 其他 key mappings 在  ~/.config/nvim/lua/plugins/avante.nvim.lua
+          ["<Leader>a"] = { name = "👾 Avante" }, -- 其他 key mappings 在  ~/.config/nvim/lua/plugins/avante.nvim.lua
         },
         c = {
           ["<leader><leader>w"] = { function() require("flash").toggle() end, desc = "Toggle Flash Search" },

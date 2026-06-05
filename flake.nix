@@ -23,6 +23,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # ghostty flake
     ghostty.url = "github:ghostty-org/ghostty";
+    # mcp-hub
+    mcp-hub.url = "github:ravitemer/mcp-hub";
   };
 
   outputs =

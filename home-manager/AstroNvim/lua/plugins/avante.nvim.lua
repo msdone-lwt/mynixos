@@ -109,28 +109,6 @@ return {
       --   ---@type fun(data: string, handler_opts: AvanteHandlerOptions): nil
       --   parse_stream_data = function(data, handler_opts) end
       -- }
-      ["ephone_claude3.7"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api.ephone.ai/v1",
-        api_key_name = "EPHONE_API_KEY",
-        -- model = "claude-3-5-sonnet-20241022",
-        -- model = "grok-3-reasoner",
-        model = "claude-3-7-sonnet-20250219",
-        display_name = "ephone claude-3-7-sonnet-20250219",
-      },
-      ["ephone_gpt_5_codex"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api.ephone.ai/v1/responses/",
-        api_key_name = "EPHONE_API_KEY",
-        model = "gpt-5-codex",
-        display_name = "ephone gpt 5 codex",
-      },
-      burnhair = {
-        __inherited_from = "claude",
-        endpoint = "https://api.burn.hair",
-        api_key_name = "BURNHAIR_API_KEY",
-        model = "claude-3-7-sonnet-20250219",
-      },
       groq = {
         __inherited_from = "openai",
         -- endpoint = "https://api.groq.com/openai/v1/chat/completions",
@@ -146,54 +124,6 @@ return {
         endpoint = "https://openrouter.ai/api/v1",
         api_key_name = "OPENROUTER_API_KEY",
         model = "google/gemini-2.5-pro-exp-03-25:free",
-      },
-      ["modelscope-qwen3-coder-480B"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api-inference.modelscope.cn/v1",
-        api_key_name = "MODELSCOPE_API_KEY",
-        model = "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-      },
-      ["modelscope-glm-4.6"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api-inference.modelscope.cn/v1",
-        api_key_name = "MODELSCOPE_API_KEY",
-        model = "ZhipuAI/GLM-4.6",
-      },
-      ["nyxar-claude-4"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api.nyxar.org/v1",
-        api_key_name = "NYXAR_API_KEY",
-        model = "claude-sonnet-4-5-20250929",
-      },
-      ["nyxar-glm"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api.nyxar.org/v1",
-        api_key_name = "NYXAR_API_KEY",
-        model = "glm-4.6",
-      },
-      ["nyxar-gpt-5"] = {
-        __inherited_from = "openai",
-        endpoint = "https://api.nyxar.org/v1",
-        api_key_name = "NYXAR_API_KEY",
-        model = "gpt-5",
-      },
-      ["iflow-kimi-k2-instruct"] = {
-        __inherited_from = "openai", -- https://platform.iflow.cn/models
-        endpoint = "https://apis.iflow.cn/v1",
-        api_key_name = "IFLOW_API_KEY",
-        model = "kimi-k2-0905",
-      },
-      ["iflow-qwen-3-max"] = {
-        __inherited_from = "openai", -- https://platform.iflow.cn/models
-        endpoint = "https://apis.iflow.cn/v1",
-        api_key_name = "IFLOW_API_KEY",
-        model = "qwen3-max-preview",
-      },
-      ["iflow-qwen3-coder"] = {
-        __inherited_from = "openai", -- https://platform.iflow.cn/models
-        endpoint = "https://apis.iflow.cn/v1",
-        api_key_name = "IFLOW_API_KEY",
-        model = "qwen3-coder",
       },
     },
     acp_providers = {
@@ -217,12 +147,12 @@ return {
         command = "npx",
         args = { "@zed-industries/claude-code-acp" },
         env = {
-          NODE_NO_WARNINGS = "1",
+          -- NODE_NO_WARNINGS = "1",
           ANTHROPIC_API_KEY = os.getenv "ANTHROPIC_AUTH_TOKEN",
           ANTHROPIC_BASE_URL = os.getenv "ANTHROPIC_BASE_URL",
-          ANTHROPIC_MODEL = os.getenv "ANTHROPIC_MODEL",
-          ANTHROPIC_SMALL_FAST_MODEL = os.getenv "ANTHROPIC_SMALL_FAST_MODEL",
-          API_TIMEOUT_MS = os.getenv "API_TIMEOUT_MS",
+          -- ANTHROPIC_MODEL = os.getenv "ANTHROPIC_MODEL",
+          -- ANTHROPIC_SMALL_FAST_MODEL = os.getenv "ANTHROPIC_SMALL_FAST_MODEL",
+          -- API_TIMEOUT_MS = os.getenv "API_TIMEOUT_MS",
         },
       },
       ["codex"] = {
@@ -239,7 +169,7 @@ return {
     ---@alias Mode "agentic" | "legacy"
     mode = "agentic",
     -- cursor_applying_provider = "groq", -- 遍历文件插入，需要响应速度快的 provider
-    provider = "opencode", -- Recommend using Claude
+    provider = "codex", -- Recommend using Claude
     auto_suggestions_provider = "gemini", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
     -- disabled_tools = { "git_diff", "git_commit" },
     -- disabled_tools = { "replace_in_file"},
@@ -315,7 +245,7 @@ return {
       },
       submit = {
         normal = "<CR>",
-        insert = "<C-j>",
+        insert = "<C-M>",
         -- insert = "<C-CR>",
         -- NOTE: 20241023 在 windows terminal 中等于Ctrl + enter,
         -- showkey -a 命令可以查看具体的按键序列(ps: 记得退出 tmux 环境,否则一些按键会被拦截)
@@ -346,6 +276,15 @@ return {
         add_all_buffers = "<leader>aB",
       },
     },
+    shortcuts = {
+      {
+        name = "test",
+        description = "生成单元测试",
+        details = "创建全面的单元测试，涵盖边界情况、错误场景和各种输入条件",
+        prompt = "请为此代码生成全面的单元测试，涵盖边界情况和错误场景。",
+      },
+      -- 添加更多自定义快捷方式...
+    },
     system_prompt = function()
       local hub = require("mcphub").get_hub_instance()
       if hub then return hub:get_active_servers_prompt() end
@@ -366,7 +305,7 @@ return {
   -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
   specs = {
     { "AstroNvim/astroui", opts = { icons = { Avante = "" } } },
-    { "AstroNvim/astrocore", opts = function(_, opts) opts.mappings.n["<Leader>a"] = { desc = "🤖 Avante" } end },
+    { "AstroNvim/astrocore", opts = function(_, opts) opts.mappings.n["<Leader>a"] = { desc = "👾 Avante" } end },
     {
       "Kaiser-Yang/blink-cmp-avante",
       lazy = true,
@@ -424,36 +363,6 @@ return {
     {
       "nvim-neo-tree/neo-tree.nvim",
       optional = true,
-      opts = {
-        -- filesystem = {
-        --   commands = {
-        --     avante_add_files = function(state)
-        --       local node = state.tree:get_node()
-        --       local filepath = node:get_id()
-        --       local relative_path = require("avante.utils").relative_path(filepath)
-        --
-        --       local sidebar = require("avante").get()
-        --
-        --       local open = sidebar:is_open()
-        --       -- ensure avante sidebar is open
-        --       if not open then
-        --         require("avante.api").ask()
-        --         sidebar = require("avante").get()
-        --       end
-        --
-        --       sidebar.file_selector:add_selected_file(relative_path)
-        --
-        --       -- remove neo tree buffer
-        --       if not open then sidebar.file_selector:remove_selected_file "neo-tree filesystem [1]" end
-        --     end,
-        --   },
-        -- },
-        -- window = {
-        --   mappings = {
-        --     ["oa"] = "avante_add_files",
-        --   },
-        -- },
-      },
     },
   },
   dependencies = {
@@ -501,9 +410,6 @@ return {
           help = true,
           Avante = true,
         },
-        copilot_node_command = (vim.fn.has "wsl" == 1 and vim.fn.hostname() == "OpenValley-LWT")
-            and (vim.fn.expand "$HOME" .. "/.nvm/versions/node/v23.0.0/bin/node")
-          or nil, -- 仅在 WSL 并且主机名为 open 时设置
       },
     }, -- for providers='copilot'
     {
