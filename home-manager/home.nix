@@ -62,6 +62,9 @@
       bottom
       fd
       unzip
+      claude-code
+      codex
+      opencode
       # xclip   # 剪贴板支持 (Linux X11)
       wl-clipboard # 剪贴板支持 (Wayland)
       gcc
