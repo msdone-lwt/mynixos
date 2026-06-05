@@ -13,7 +13,7 @@
       postFixup = (oldAttrs.postFixup or "") + ''
         echo "正在 Overlay 中替换 Sparkle 内核..."
 
-        target="$out/opt/sparkle/resources/sidecar/mihomo"
+        target="$out/lib/sparkle/resources/sidecar/mihomo"
 
         # 1. 删除自带的无权限内核
         rm -f "$target"

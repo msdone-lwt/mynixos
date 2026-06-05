@@ -14,12 +14,12 @@
 
   inputs = {
     # Nixpkgs 软件源:  你可以同时访问来自不同 nixpkgs 版本的软件包和模块。这里是一个运行示例：
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # 另请参阅 'overlays/default.nix' 中的 'unstable-packages' 覆盖层。
 
     # Home manager 配置管理
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # ghostty flake
     ghostty.url = "github:ghostty-org/ghostty";

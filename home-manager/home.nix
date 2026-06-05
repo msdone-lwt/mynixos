@@ -35,7 +35,8 @@
     packages = with pkgs; [
       # clash-verge-rev
       sparkle
-      new-folo
+      # new-folo
+      # any-listen
       wechat
       cryptomator
       tmux
@@ -49,7 +50,7 @@
       # nextai-translator
       # node
       nodejs_24
-      nodePackages.typescript  # tsc
+      typescript  # tsc
       # python
       python315
       uv
