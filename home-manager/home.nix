@@ -36,7 +36,7 @@
       # clash-verge-rev
       sparkle
       new-folo
-      # any-listen
+      any-listen
       wechat
       cryptomator
       tmux
