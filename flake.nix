@@ -86,13 +86,6 @@
         };
       };
 
-      devShells.x86_64-linux.default = nixpkgs.mkShell {
-        # 英伟达显卡的动态链接库
-        shellHook = ''
-          export LD_LIBRARY_PATH=/run/opengl-driver/lib:$LD_LIBRARY_PATH
-        '';
-      };
-
       # 独立的 home-manager 配置入口点
       # 可通过 'home-manager --flake .#your-username@your-hostname' 使用
       # homeConfigurations = {

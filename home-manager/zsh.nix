@@ -45,6 +45,8 @@
         fi
 
         export ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+        # 英伟达显卡的动态链接库
+	      export LD_LIBRARY_PATH="/run/opengl-driver/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
         bindkey -r '^l'
       '')
       (lib.mkAfter ''
