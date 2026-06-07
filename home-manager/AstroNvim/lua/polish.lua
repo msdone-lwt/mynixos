@@ -55,4 +55,4 @@ vim.api.nvim_set_hl(0, "gitBlameVirtualText", { fg = "#696c76", bg = "#1e222a", 
 vim.opt.laststatus = 3
 vim.g.augment_disable_tab_mapping = true
 -- OSC 52
--- vim.g.clipboard = "osc52"
+vim.g.clipboard = "osc52"
