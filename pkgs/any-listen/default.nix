@@ -1,16 +1,25 @@
 {
-  copyDesktopItems,
-  electron_40,
+  lib,
+  stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
-  lib,
-  makeDesktopItem,
+
+  copyDesktopItems,
   makeWrapper,
-  nodejs,
+  makeDesktopItem,
+
+  electron_40,
+  nix-update-script,
+  nodejs-slim,
   pnpm_10_29_2,
   pnpmConfigHook,
-  stdenv,
+  commandLineArgs ? "",
 }:
+
+let
+  electron = electron_40;
+  pnpm = pnpm_10_29_2;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "any-listen";
   version = "0.7.0-beta.28";
@@ -33,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
+    inherit pnpm;
     fetcherVersion = 3;
     sourceRoot = "source/any-listen";
     hash = "sha256-vvkrTNM4sUJ5W9Mrcomkci7U0OZ116RMLju5zYvyBrQ=";
@@ -42,21 +51,36 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    nodejs
-    pnpm_10_29_2
+    nodejs-slim
+    pnpm
     pnpmConfigHook
   ];
 
+  strictDeps = true;
+
   env = {
-    ELECTRON_OVERRIDE_DIST_PATH = "${electron_40}/libexec/electron";
+    ELECTRON_OVERRIDE_DIST_PATH = "${electron}/libexec/electron";
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
   postPatch = ''
+    # fetchFromGitHub sources do not include a .git directory.
+    substituteInPlace packages/desktop/build-config/vite.config.ts \
+      --replace-fail "let isClean = !execSync('git status --porcelain').toString().trim()" \
+                     "let isClean = false"
+
+    # Disable the built-in automatic updater; updates are handled by Nix.
+    substituteInPlace packages/shared/common/defaultSetting.ts \
+      --replace-fail "'common.tryAutoUpdate': true" "'common.tryAutoUpdate': false"
+
+    substituteInPlace packages/desktop/src/app/index.ts \
+      --replace-fail "if (process.env.NODE_ENV === 'production') void startCheckUpdateTimeout()" \
+                     "if (false) void startCheckUpdateTimeout()"
+
     substituteInPlace packages/desktop/build-config/build-pack.cjs \
       --replace-fail "const options = {" "const options = {
-      electronDist: '${electron_40}/libexec/electron',
-      electronVersion: '${electron_40.version}',"
+      electronDist: '${electron}/libexec/electron',
+      electronVersion: '${electron.version}',"
   '';
 
   buildPhase = ''
@@ -77,14 +101,16 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin" "$out/share/${finalAttrs.pname}"
-    cp -r build/linux-unpacked/resources "$out/share/${finalAttrs.pname}/"
+    mkdir -p "$out/bin" "$out/opt/${finalAttrs.pname}"
+    cp -r build/linux-unpacked/resources "$out/opt/${finalAttrs.pname}/"
+    rm -f "$out/opt/${finalAttrs.pname}/resources/app-update.yml"
 
-    makeWrapper "${electron_40}/bin/electron" "$out/bin/any-listen" \
+    makeWrapper ${lib.getExe electron} "$out/bin/any-listen" \
       --inherit-argv0 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --add-flags "$out/share/${finalAttrs.pname}/resources/app.asar" \
-      --add-flags "-dt"
+      --add-flags "$out/opt/${finalAttrs.pname}/resources/app.asar" \
+      --add-flags "-dt" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     for icon in packages/desktop/resources/icons/*x*.png; do
       size="''${icon##*/}"
@@ -97,28 +123,36 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "any-listen";
-      exec = "any-listen %u";
-      icon = "any-listen";
-      desktopName = "Any Listen";
-      comment = "Cross-platform private music playback service";
       categories = [
         "AudioVideo"
         "Audio"
         "Player"
         "Music"
       ];
-      mimeTypes = ["x-scheme-handler/anylisten"];
+      comment = "Cross-platform private music playback service";
+      desktopName = "Any Listen";
+      exec = "any-listen %u";
+      genericName = "Music Player";
+      icon = "any-listen";
+      mimeTypes = [ "x-scheme-handler/anylisten" ];
+      name = "any-listen";
+      startupNotify = false;
+      startupWMClass = "any-listen";
+      terminal = false;
+      type = "Application";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform private music playback service";
     homepage = "https://github.com/any-listen/any-listen-desktop";
     changelog = "https://github.com/any-listen/any-listen-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [msdone];
+    maintainers = with lib.maintainers; [ msdone ];
     mainProgram = "any-listen";
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
