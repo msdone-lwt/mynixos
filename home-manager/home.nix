@@ -37,6 +37,8 @@
       sparkle
       new-folo
       any-listen
+      lx-music-desktop 
+      gh
       wechat
       cryptomator
       tmux
