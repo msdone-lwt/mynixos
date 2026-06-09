@@ -84,7 +84,7 @@
   # 应用后，在 flake input 中声明的 unstable nixpkgs 集将可以通过 'pkgs.unstable' 访问
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
     };
   };

@@ -69,6 +69,7 @@
       unzip
       claude-code
       codex
+      unstable.cc-switch
       opencode
       codex-acp
       delta
