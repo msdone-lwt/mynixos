@@ -69,6 +69,7 @@
       unzip
       claude-code
       codex
+      mgrep
       unstable.cc-switch
       opencode
       codex-acp

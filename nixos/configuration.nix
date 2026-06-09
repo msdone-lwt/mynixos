@@ -197,6 +197,10 @@ in
   programs.coolercontrol.enable = true;
   programs.nix-ld.enable = true;
   environment.variables.EDITOR = "nvim";
+   # 基于 Chromium 和 Electron 架构的应用程序原生运行在 Wayland 显示服务器上，而不是通过 XWayland（X11 的兼容层）运行。
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+  };
   environment.systemPackages = with pkgs; [
     neovim
     wget
