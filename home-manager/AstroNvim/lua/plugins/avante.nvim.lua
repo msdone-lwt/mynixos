@@ -125,6 +125,13 @@ return {
         api_key_name = "OPENROUTER_API_KEY",
         model = "google/gemini-2.5-pro-exp-03-25:free",
       },
+      muyuan = {
+        __inherited_from = "openai",
+        endpoint = "https://muyuan.do/v1",
+        api_key_name = "BING_API_KEY",
+        model = "claude-opus-4-8",
+        -- model = "gpt-5.5",
+      },
     },
     acp_providers = {
       ["gemini-cli"] = {
@@ -145,11 +152,11 @@ return {
       },
       ["claude-code"] = {
         command = "npx",
-        args = { "@zed-industries/claude-code-acp" },
+        args = { "@agentclientprotocol/claude-agent-acp" },
         env = {
           -- NODE_NO_WARNINGS = "1",
-          ANTHROPIC_API_KEY = os.getenv "ANTHROPIC_AUTH_TOKEN",
-          ANTHROPIC_BASE_URL = os.getenv "ANTHROPIC_BASE_URL",
+          -- ANTHROPIC_API_KEY = os.getenv "ANTHROPIC_AUTH_TOKEN",
+          -- ANTHROPIC_BASE_URL = os.getenv "ANTHROPIC_BASE_URL",
           -- ANTHROPIC_MODEL = os.getenv "ANTHROPIC_MODEL",
           -- ANTHROPIC_SMALL_FAST_MODEL = os.getenv "ANTHROPIC_SMALL_FAST_MODEL",
           -- API_TIMEOUT_MS = os.getenv "API_TIMEOUT_MS",
@@ -169,7 +176,7 @@ return {
     ---@alias Mode "agentic" | "legacy"
     mode = "agentic",
     -- cursor_applying_provider = "groq", -- 遍历文件插入，需要响应速度快的 provider
-    provider = "codex", -- Recommend using Claude
+    provider = "muyuan", -- Recommend using Claude
     auto_suggestions_provider = "gemini", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
     -- disabled_tools = { "git_diff", "git_commit" },
     -- disabled_tools = { "replace_in_file"},

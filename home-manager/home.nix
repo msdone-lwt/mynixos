@@ -23,6 +23,7 @@
     ./tmux.nix
     ./ghostty.nix
     ./nvim.nix
+    ./lazygit.nix
   ];
 
   home = {
@@ -70,8 +71,9 @@
       codex
       opencode
       codex-acp
+      delta
       # xclip   # 剪贴板支持 (Linux X11)
-      wl-clipboard # 剪贴板支持 (Wayland)
+      # wl-clipboard # 剪贴板支持 (Wayland)
       gcc
       gnumake
       pkg-config

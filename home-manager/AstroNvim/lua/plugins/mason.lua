@@ -31,6 +31,9 @@ return {
         "nil",
         "taplo",
         "vtsls",
+        "yaml-language-server",
+        "actionlint",
+        "yamlfmt"
       },
       -- 启动时自动安装缺失的工具
       run_on_start = true,

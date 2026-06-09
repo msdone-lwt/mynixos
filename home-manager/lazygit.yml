@@ -1,0 +1,298 @@
+# -------------------------------- .gitconfig ----------------------------
+# [core]
+#     pager = delta
+
+# [interactive]
+#     diffFilter = delta --color-only
+# [delta]
+#     navigate = true    # use n and N to move between diff sections
+#     light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+#     side-by-side = true
+# [merge]
+#     conflictstyle = diff3
+# [diff]
+#     colorMoved = default
+customCommands: # 用 menuFromCommand 显示结果
+  - key: "<c-c>"
+    context: "files"
+    prompts:
+      - type: "menu"
+        title: "What kind of commit is it?"
+        key: "CommitType"
+        options:
+          - name: "feat"
+            description: "新功能（feature）"
+            value: "feat"
+          - name: "fix"
+            description: "修补bug"
+            value: "fix"
+          - name: "docs"
+            description: "文档（documentation）"
+            value: "docs"
+          - name: "style"
+            description: "格式（不影响代码运行的变动）"
+            value: "style"
+          - name: "refactor"
+            description: "重构（即不是新增功能，也不是修改bug的代码变动）"
+            value: "refactor"
+          - name: "test"
+            description: "增加测试"
+            value: "test"
+          - name: "chore"
+            description: "构建过程或辅助工具的变动"
+            value: "chore"
+      - type: "menu"
+        title: "What is the scope of the commit impact?"
+        key: "CommitScope"
+        options:
+          - name: "application"
+            description: "应用层"
+            value: "application"
+          - name: "framework"
+            description: "框架层"
+            value: "framework"
+          - name: "service"
+            description: "服务层"
+            value: "service"
+          - name: "kernel"
+            description: "内核层"
+            value: "kernel"
+      - type: "input"
+        title: "What is the subject of this commit?"
+        key: "CommitSubject"
+      - type: "input"
+        title: "What is the body of this commit?"
+        key: "CommitBody"
+        initialValue: ""
+      - type: "menuFromCommand"
+        title: "提交结果:"
+        key: "CommitResult"
+        command: "git commit -m '{{.Form.CommitType}}({{.Form.CommitScope}}):{{.Form.CommitSubject}}' -m '{{.Form.CommitBody}}'"
+        filter: "(?P<result>.*)"
+        valueFormat: "{{ .result }}"
+        labelFormat: "{{ .result | red }}"
+    command: ""
+    loadingText: "In Submission"
+    description: "customCommands: Standard submission"
+    output: log
+  - key: "<c-p>"
+    # NOTE: 设置 git alias 命令
+    # git config --global alias.gerrit-push '!f() { \
+    #     if [ -z "$1" ]; then \
+    #         echo "Usage: git gerrit-push <remote>/<branch>"; \
+    #         return 1; \
+    #     fi; \
+    #     remote_branch_pair="$1"; \
+    #     remote="${remote_branch_pair%%/*}"; \
+    #     branch="${remote_branch_pair#*/}"; \
+    #     if [ "$remote" = "$branch" ] && ! echo "$remote_branch_pair" | grep -q "/"; then \
+    #         echo "Error: Argument must be in <remote>/<branch> format (e.g., origin/master)."; \
+    #         echo "If you meant to push to a branch on '\''origin'\'', use '\''origin/$branch'\''."; \
+    #         return 1; \
+    #     fi; \
+    #     echo "Pushing HEAD to $remote for branch $branch (refs/for/$branch)..."; \
+    #     git push -u "$remote" "HEAD:refs/for/$branch"; \
+    # }; f'
+    context: "files"
+    # origin/master
+    # command: 'powershell -Command "$parts = ''{{.Form.Remote}}''.Split(''/''); git push -u $parts[0] (''HEAD:refs/for/'' + $parts[1])"' # windows platform
+    command: "git gerrit-push {{.Form.Remote}}" # all platform
+    description: "customCommands: Gerrit push"
+    prompts:
+      - type: "input"
+        title: "Which remote branch?"
+        key: "Remote"
+        initialValue: "{{.SelectedRemote.Name}}/{{.SelectedLocalBranch.Name}}"
+        suggestions:
+          preset: "remoteBranches"
+    output: popup
+    outputTitle: "Push result"
+  - key: "a"
+    context: "localBranches"
+    prompts:
+      - type: "input"
+        title: "Type you name"
+        initialValue: "selfTransition"
+        key: "UserName"
+      - type: "input"
+        title: "Type you email"
+        initialValue: "lwt6077@gmail.com"
+        key: "UserEmail"
+    command: "git config user.name '{{.Form.UserName}}' && git config user.email '{{.Form.UserEmail}}'"
+    description: "customCommands: Modify the local repository commit author information"
+    output: log
+  - key: "C"
+    command: ""
+    description: "customCommands: 查看本地分支的提交次数"
+    context: "localBranches"
+    prompts:
+      - type: "menuFromCommand"
+        title: "本地分支 {{.SelectedLocalBranch.Name }} 的提交次数为:"
+        key: "LocalBranchCommitCount"
+        command: "git rev-list --count {{.SelectedLocalBranch.Name }}"
+        filter: "(?P<count>.*)"
+        valueFormat: "{{ .count }}"
+        labelFormat: "{{ .count | red }}"
+    output: log
+  - key: "C"
+    command: ""
+    description: "customCommands: 查看远程仓库的提交次数"
+    context: "remotes"
+    prompts:
+      - type: "menuFromCommand"
+        title: "请选择远程仓库的分支"
+        key: "Branch"
+        command: "git branch  -r --list {{.SelectedRemote.Name }}/*"
+        filter: ".*{{.SelectedRemote.Name }}/(?P<branch>.*)"
+        valueFormat: "{{ .branch }}"
+        labelFormat: "{{ .branch | red }}"
+      - type: "menuFromCommand"
+        title: "远程分支 {{.SelectedRemote.Name }}/{{.Form.Branch}} 的提交次数为:"
+        key: "RemotesCommitCount"
+        command: "git rev-list --count {{.SelectedRemote.Name }}/{{.Form.Branch}}"
+        filter: "(?P<count>.*)"
+        valueFormat: "{{ .count }}"
+        labelFormat: "{{ .count | red }}"
+    output: log
+  - key: "P"
+    command: "git {{.Form.OperationMode}} {{.SelectedRemote.Name }} {{.Form.Branch}}"
+    description: "customCommands: 多仓库(指定仓库pull/push)"
+    context: "remotes"
+    prompts:
+      - type: "menu"
+        title: "Mode of operation"
+        key: "OperationMode"
+        options:
+          - name: "pull"
+            value: "pull"
+          - name: "push"
+            value: "push"
+      - type: "menuFromCommand"
+        title: "Remote branch:"
+        key: "Branch"
+        command: "git branch  -r --list {{.SelectedRemote.Name }}/*"
+        filter: ".*{{.SelectedRemote.Name }}/(?P<branch>.*)"
+        valueFormat: "{{ .branch }}"
+        labelFormat: "{{ .branch | red }}"
+  - key: "C"
+    command: ""
+    description: "customCommands: 查看当前本地分支从指定标签(这个标签也算一次提交)到 HEAD 的提交次数"
+    context: "tags"
+    prompts:
+      - type: "menuFromCommand"
+        title: "本地分支从 {{.SelectedTag.Name }} 到 HEAD 的提交次数为:"
+        key: "LocalBranchCommitCount"
+        command: "git rev-list {{.SelectedTag.Name }}^..HEAD --count"
+        filter: "(?P<tagCount>.*)"
+        valueFormat: "{{ .tagCount }}"
+        labelFormat: "{{ .tagCount | red }}"
+    output: log
+  - key: <end>
+    context: "files"
+    description: "customCommands: Feature Commit"
+    command: |
+      powershell -Command 'git commit -m "feat: to #{{.Form.FeatureID}} {{.Form.FeatureTitle}}" -m "{{.Form.Content}}`n{{.Form.Effection}}"'
+    prompts:
+      - type: "input"
+        title: "Feature ID"
+        key: "FeatureID"
+      - type: "input"
+        title: "Feature Title"
+        key: "FeatureTitle"
+      - type: "input"
+        title: "content"
+        key: "Content"
+        initialValue: "content: "
+      - type: "input"
+        title: "Effection (Impact)"
+        key: "Effection"
+        initialValue: "effection: "
+    loadingText: "Creating feature commit..."
+    output: popup
+  - key: <home>
+    context: "files"
+    description: "customCommands: Fix Bug Commit"
+    # command: "git commit -m \"fix: to #{{.Form.BugID}} {{.Form.BugTitle}}\" -m \"{{.Form.Rootcause}}\" -m \"{{.Form.Solution}}\" -m \"{{.Form.Effection}}\""
+    command: |
+      powershell -Command 'git commit -m "fix: to #{{.Form.BugID}} {{.Form.BugTitle}}" -m "{{.Form.Rootcause}}`n{{.Form.Solution}}`n{{.Form.Effection}}"'
+    prompts:
+      - type: "input"
+        title: "Bug ID"
+        key: "BugID"
+      - type: "input"
+        title: "Bug Title"
+        key: "BugTitle"
+      - type: "input"
+        title: "Root Cause"
+        key: "Rootcause"
+        initialValue: "rootcause: "
+      - type: "input"
+        title: "Solution"
+        key: "Solution"
+        initialValue: "solution: "
+      - type: "input"
+        title: "Effection (Impact)"
+        key: "Effection"
+        initialValue: "effection: "
+    loadingText: "Creating bug fix commit..."
+    output: popup
+  - key: "C"
+    context: "files"
+    description: "customCommands: Commit Type (feat/fix) - SendKeys"
+    command: 'powershell -Command "if (''{{.Form.CommitType}}'' -eq ''feat'') { (New-Object -ComObject WScript.Shell).SendKeys(''{END}'') } elseif (''{{.Form.CommitType}}'' -eq ''fix'') { (New-Object -ComObject WScript.Shell).SendKeys(''{HOME}'') }"' # NOTE: 模拟按键
+    prompts:
+      - type: "menu"
+        title: "What is the type of this commit?"
+        key: "CommitType"
+        options:
+          - name: "feat"
+            description: "New feature (feature)"
+            value: "feat"
+          - name: "fix"
+            description: "Bug fix"
+            value: "fix"
+    loadingText: "Processing commit type..."
+    output: log
+  - key: 'f'
+    command: "git difftool -y {{.SelectedLocalCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
+    context: 'commitFiles'
+    description: 'Compare (difftool) with local copy'
+keybinding:
+  universal:
+    filteringMenu: "<c-f>"
+gui:
+  sidePanelWidth: 0.3333 # gives you more space to show things side-by-side
+  nerdFontsVersion: 3
+  language: "zh-CN" # one of 'auto' | 'en' | 'zh-CN' | 'zh-TW' | 'pl' | 'nl' | 'ja' | 'ko' | 'ru'
+  theme:
+    selectedLineBgColor:
+      - reverse
+    selectedRangeBgColor:
+      - reverse
+    activeBorderColor:
+      - blue
+      - reverse
+    inactiveBorderColor:
+      - white
+    searchingActiveBorderColor:
+      - cyan
+      - reverse
+    cherryPickedCommitBgColor:
+      - cyan
+    cherryPickedCommitFgColor:
+      - blue
+    unstagedChangesColor:
+      - red
+    defaultFgColor:
+      - blue
+git:
+  branchLogCmd: "git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=format:'%C(auto)%h%d %Creset%ad %Cgreen%an%Creset - %s' {{branchName}} --"
+  pagers:
+    - name: main
+      colorArg: always
+      pager: delta --dark --paging=never --inline-hint-style="syntax" --wrap-max-lines=100 --wrap-left-symbol="↩" --wrap-right-symbol="↩" --wrap-right-percent=85 --wrap-right-prefix-symbol="↪"
+  commit:
+    signOff: true
+os:
+  open: 'open "" {{filename}}'
+notARepository: "skip"
