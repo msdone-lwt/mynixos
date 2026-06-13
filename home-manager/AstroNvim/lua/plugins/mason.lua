@@ -33,7 +33,8 @@ return {
         "vtsls",
         "yaml-language-server",
         "actionlint",
-        "yamlfmt"
+        "yamlfmt",
+        -- "rust-analyzer",
       },
       -- 启动时自动安装缺失的工具
       run_on_start = true,

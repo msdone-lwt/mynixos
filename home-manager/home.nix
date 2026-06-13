@@ -38,7 +38,7 @@
       sparkle
       new-folo
       any-listen
-      lx-music-desktop 
+      lx-music-desktop
       gh
       wechat
       cryptomator
@@ -55,7 +55,7 @@
       # nextai-translator
       # node
       nodejs_24
-      typescript  # tsc
+      typescript # tsc
       # python
       python315
       uv
@@ -88,8 +88,8 @@
       cargo
       rustc
       clippy
-      # rust-analyzer
-      # rustfmt
+      rustfmt
+      rust-analyzer
       # NOTE: hardware info
       cpu-x
       hardinfo2
