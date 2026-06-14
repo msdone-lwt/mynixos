@@ -80,13 +80,15 @@ in
       nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
     };
 
-  # 1: Bootloader.
+  # NOTE: 1: Bootloader.
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; # UEFI
   # boot.supportedFilesystems = [ "ntfs" ];
   # boot.kernelPackages = pkgs.linuxPackages_latest; # 使用最新的linux 内核
 
-  # 2: Network
+  # NOTE: 2: Network
+
   networking.hostName = "nixos-msdone"; # 设置你的主机名
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -98,12 +100,14 @@ in
   networking.networkmanager.enable = true;
   networking.firewall.trustedInterfaces = [ "mihomo" ];
 
-  # 3: Time zone
+  # NOTE: 3: Time zone
+
   # Set your time zone.
   time.timeZone = "Asia/Shanghai";
   time.hardwareClockInLocalTime = true;
 
-  # 4: Internationalisation
+  # NOTE: 4: Internationalisation
+
   # Select internationalisation properties.
   i18n.defaultLocale = "zh_CN.UTF-8";
   i18n.extraLocaleSettings = {
@@ -130,7 +134,8 @@ in
     ];
   };
 
-  # 5: Font
+  # NOTE: 5: Font
+
   fonts = {
     packages = with pkgs; [
       # nredfont
@@ -162,34 +167,61 @@ in
       };
     };
   };
-  # 6: Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
-  services.xserver = {
-    # Enable the X11 window ing system.
-    enable = true;
-    # Configure keymap in X11
-    xkb = {
-      layout = "cn";
-      variant = "";
-    };
-  };
-  # 覆盖 GNOME 的默认 GSettings 设置
-  services.desktopManager.gnome.extraGSettingsOverrides = ''
-    [org.gnome.desktop.interface]
-    font-name='${myFont} ${myFontSize}'
-    document-font-name='${myFont} ${myFontSize}'
-    monospace-font-name='${myMonoFont} ${myFontSize}'
+  # NOTE: 6: Desktop Environment.
 
-    [org.gnome.desktop.wm.preferences]
-    titlebar-font='${myFont} Bold ${myFontSize}'
-  '';
+  # services.displayManager.gdm.enable = true;
+  # services.desktopManager.gnome.enable = true;
+  # services.xserver = {
+  #   # Enable the X11 window ing system.
+  #   enable = true;
+  #   # Configure keymap in X11
+  #   xkb = {
+  #     layout = "cn";
+  #     variant = "";
+  #   };
+  # };
+  # 覆盖 GNOME 的默认 GSettings 设置
+  # services.desktopManager.gnome.extraGSettingsOverrides = ''
+  #   [org.gnome.desktop.interface]
+  #   font-name='${myFont} ${myFontSize}'
+  #   document-font-name='${myFont} ${myFontSize}'
+  #   monospace-font-name='${myMonoFont} ${myFontSize}'
+  #
+  #   [org.gnome.desktop.wm.preferences]
+  #   titlebar-font='${myFont} Bold ${myFontSize}'
+  # '';
   environment.etc."gtk-3.0/settings.ini".text = ''
     [Settings]
     gtk-font-name=${myFont} ${myFontSize}
   '';
+  # NOTE: dms + niri
 
-  # 7: 系统级软件包与程序
+  # 禁用 X11（niri 是纯 Wayland）
+  services.xserver.enable = false;
+  # XWayland 支持（如果需要运行 X11 应用）
+  programs.xwayland.enable = true;
+  # 禁用完整的 GNOME 桌面
+  services.desktopManager.gnome.enable = false;
+  services.displayManager.gdm.enable = false;
+  # 保留密钥环服务
+  services.gnome.gnome-keyring.enable = true;
+  # 桌面环境 - niri + dms
+  programs.dms-shell.enable = true; # 启用 DankMaterialShell
+  programs.niri.enable = true; # 启用 Niri
+  programs.dms-shell.systemd.restartIfChanged = true; # 当 dms-shell 配置文件更改时，自动重启 dms-shell 服务
+  programs.dms-shell.systemd.target = "wayland-session.target"; # dms-shell 启动时关联的 systemd 目标单元, options: "wayland-session.target"(Wanland 会话), "graphical-session.target"(大多数桌面环境)
+  programs.dms-shell.quickshell.package = pkgs.quickshell; # quickshell 的安装包来源, options: pkgs.unstable.quickshell
+  programs.dms-shell.package = pkgs.dms-shell; # dms 的安装包来源, options: pkgs.unstable.dms-shell
+  programs.niri.package = pkgs.niri; # niri 的安装包来源, options: pkgs.unstable.niri
+  # services.greetd.useTextGreeter = true; # 启用文本登录界面 - tuiGreet
+  services.displayManager.dms-greeter.enable = true; # 启用 DankMaterialShell 的登录界面
+  services.displayManager.dms-greeter.compositor.name = "niri"; # 用于运行 greeter 的 Wayland compositor
+  # services.displayManager.dms-greeter.configFiles   FIXME:
+  # services.displayManager.dms-greeter.configHome    FIXME:
+  
+
+  # NOTE: 7: 系统级软件包与程序
+  
   programs.firefox.enable = false;
   programs.nano.enable = false;
   programs.steam.enable = true;
@@ -197,7 +229,7 @@ in
   programs.coolercontrol.enable = true;
   programs.nix-ld.enable = true;
   environment.variables.EDITOR = "nvim";
-   # 基于 Chromium 和 Electron 架构的应用程序原生运行在 Wayland 显示服务器上，而不是通过 XWayland（X11 的兼容层）运行。
+  # 基于 Chromium 和 Electron 架构的应用程序原生运行在 Wayland 显示服务器上，而不是通过 XWayland（X11 的兼容层）运行。
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
   };
@@ -210,10 +242,12 @@ in
     mihomo
   ];
 
-  # 8: 打印机 Enable CUPS to print documents.
+  # NOTE: 8: 打印机 Enable CUPS to print documents.
+
   services.printing.enable = true;
 
-  # 9: 音频 Enable sound with pipewire.
+  # NOTE: 9: 音频 Enable sound with pipewire.
+
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -233,7 +267,8 @@ in
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # 10: 用户
+  # NOTE: 10: 用户
+
   users.users.msdone = {
     isNormalUser = true;
     description = "msdone";
@@ -272,7 +307,8 @@ in
   };
   programs.zsh.enable = true;
 
-  # 11: ssh
+  # NOTE: 11: ssh
+
   # 这里设置 SSH 服务器。如果你正在设置无头系统（服务器），这非常重要。
   # 如果你不需要，可以随意删除。
   # services.openssh = {
