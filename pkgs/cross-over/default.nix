@@ -10,6 +10,10 @@
   copyDesktopItems,
   makeDesktopItem,
   npmHooks,
+  libX11,
+  libXrandr,
+  libXtst,
+  libXt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -99,6 +103,14 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe electron} "$out/bin/crossover" \
       --add-flags "$out/share/crossover/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libX11
+          libXrandr
+          libXtst
+          libXt
+        ]
+      }" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
