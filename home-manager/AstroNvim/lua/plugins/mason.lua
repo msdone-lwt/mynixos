@@ -35,6 +35,7 @@ return {
         "actionlint",
         "yamlfmt",
         -- "rust-analyzer",
+        "qmlls"
       },
       -- 启动时自动安装缺失的工具
       run_on_start = true,
