@@ -24,6 +24,7 @@
     ./ghostty.nix
     ./nvim.nix
     ./lazygit.nix
+    ./mcp.nix
   ];
 
   home = {
