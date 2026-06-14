@@ -9,7 +9,6 @@
   copyDesktopItems,
   makeDesktopItem,
   npmHooks,
-  pkgs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,19 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dUHKlKdIrbzdSE9BxILX0ptoGAwgiHzNCV9d7YjIUuk=";
   };
 
-  # Copy package.json and generated package-lock.json to a local source
-  # since upstream uses bun.lockb instead of package-lock.json
-  npmRoot = pkgs.runCommand "npm-source" {} ''
-    mkdir -p $out
-    cp ${finalAttrs.src}/package.json $out/
-    cp ${./package-lock.json} $out/package-lock.json
-  '';
-
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) pname version;
-    src = finalAttrs.npmRoot;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-lqwepQYGexsKE0EZ0OybL6icVXrCXwUlAxYhwvHcZqk=";
   };
+
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -48,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    npm install
+    ./node_modules/.bin/electron-builder \
+      --dir \
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
+
     runHook postBuild
   '';
 
