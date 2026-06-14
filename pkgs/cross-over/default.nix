@@ -67,6 +67,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+
+    mkdir -p "$out/share/crossover"
+    cp -r dist/*-unpacked/{locales,resources,resources.pak} "$out/share/crossover"
+
+    # Remove auto-update file
+    rm -f "$out/share/crossover/resources/app-update.yml"
+
+    # Install icons
+    for size in 256 512; do
+      if [ -f "assets/icon-''${size}x''${size}.png" ]; then
+        install -Dm644 "assets/icon-''${size}x''${size}.png" \
+          "$out/share/icons/hicolor/''${size}x''${size}/apps/crossover.png"
+      fi
+    done
+
+    # Fallback: try build/icon.png or src/static/icons/icon.png
+    if [ ! -f "$out/share/icons/hicolor/256x256/apps/crossover.png" ]; then
+      for iconPath in build/icon.png src/static/icons/icon.png resources/icon.png assets/icon.png; do
+        if [ -f "$iconPath" ]; then
+          install -Dm644 "$iconPath" "$out/share/icons/hicolor/256x256/apps/crossover.png"
+          break
+        fi
+      done
+    fi
+
     runHook postInstall
   '';
 
