@@ -1,21 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchNpmDeps
-, makeWrapper
-, nodejs
-, python3
-, electron
-, copyDesktopItems
-, makeDesktopItem
-, npmHooks
-, libX11
-, libXrandr
-, libXtst
-, libXt
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  makeWrapper,
+  nodejs,
+  python3,
+  electron,
+  copyDesktopItems,
+  makeDesktopItem,
+  npmHooks,
+  libX11,
+  libXrandr,
+  libXtst,
+  libXt,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "crossover";
   version = "3.4.2";
@@ -104,13 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/share/crossover/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libX11
-          libXrandr
-          libXtst
-          libXt
-        ]
-      }" \
+      lib.makeLibraryPath [
+        libX11
+        libXrandr
+        libXtst
+        libXt
+      ]
+    }" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
@@ -123,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "crossover";
       desktopName = "CrossOver";
       comment = "Crosshair overlay for any screen";
-      categories = [ "Game" "Utility" ];
+      categories = ["Game" "Utility"];
       startupWMClass = "crossover";
     })
   ];
@@ -133,9 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/lacymorrow/crossover";
     changelog = "https://github.com/lacymorrow/crossover/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ msdone ];
+    maintainers = with lib.maintainers; [msdone];
     mainProgram = "crossover";
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = ["x86_64-linux"];
+    sourceProvenance = with lib.sourceTypes; [fromSource];
   };
 })
