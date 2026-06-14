@@ -5,6 +5,7 @@
   fetchNpmDeps,
   makeWrapper,
   nodejs,
+  python3,
   electron,
   copyDesktopItems,
   makeDesktopItem,
@@ -29,11 +30,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
+    chmod +w package-lock.json
+
+    # Disable auto-update feature
+    substituteInPlace src/main.js \
+      --replace-fail "autoUpdate.update()" "// autoUpdate.update() - disabled for Nix" \
+      || true
+
+    substituteInPlace src/main/auto-update.js \
+      --replace-fail "autoUpdater.checkForUpdates()" "// autoUpdater.checkForUpdates() - disabled for Nix" \
+      --replace-fail "autoUpdater.checkForUpdatesAndNotify()" "// autoUpdater.checkForUpdatesAndNotify() - disabled for Nix" \
+      || true
   '';
 
   nativeBuildInputs = [
     makeWrapper
     nodejs
+    python3
     npmHooks.npmConfigHook
     copyDesktopItems
   ];
