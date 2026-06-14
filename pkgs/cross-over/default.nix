@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  makeWrapper,
-  nodejs,
-  python3,
-  electron,
-  copyDesktopItems,
-  makeDesktopItem,
-  npmHooks,
-  libX11,
-  libXrandr,
-  libXtst,
-  libXt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchNpmDeps
+, makeWrapper
+, nodejs
+, python3
+, electron
+, copyDesktopItems
+, makeDesktopItem
+, npmHooks
+, libX11
+, libXrandr
+, libXtst
+, libXt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
