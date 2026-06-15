@@ -1,0 +1,6 @@
+{
+  "dankPomodoroTimer": {
+    "enabled": true,
+    "autoStartBreaks": false
+  }
+}

@@ -25,6 +25,8 @@
     ./nvim.nix
     ./lazygit.nix
     ./mcp.nix
+    ./dms-shell.nix
+    ./niri.nix
   ];
 
   home = {

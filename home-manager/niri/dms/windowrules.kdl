@@ -1,0 +1,11 @@
+// DMS Window Rules - Managed by DankMaterialShell
+// Do not edit manually - changes may be overwritten
+
+// @id=wr_1781494221519604582 @name=sparkle
+window-rule {
+    match app-id="sparkle"
+    open-floating true
+    open-focused true
+    default-column-width { fixed 900; }
+    default-window-height { fixed 450; }
+}
