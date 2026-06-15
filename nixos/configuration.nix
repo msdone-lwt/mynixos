@@ -209,7 +209,6 @@ in
   programs.dms-shell.enable = true; # 启用 DankMaterialShell
   programs.niri.enable = true; # 启用 Niri
   programs.dms-shell.systemd.restartIfChanged = true; # 当 dms-shell 配置文件更改时，自动重启 dms-shell 服务
-  programs.dms-shell.systemd.target = "wayland-session.target"; # dms-shell 启动时关联的 systemd 目标单元, options: "wayland-session.target"(Wanland 会话), "graphical-session.target"(大多数桌面环境)
   programs.dms-shell.quickshell.package = pkgs.quickshell; # quickshell 的安装包来源, options: pkgs.unstable.quickshell
   programs.dms-shell.package = pkgs.dms-shell; # dms 的安装包来源, options: pkgs.unstable.dms-shell
   programs.niri.package = pkgs.niri; # niri 的安装包来源, options: pkgs.unstable.niri
