@@ -5,5 +5,4 @@ pkgs: {
   nextai-translator = pkgs.callPackage ./nextai-translator { };
   new-folo = pkgs.callPackage ./new-folo { };
   any-listen = pkgs.callPackage ./any-listen { };
-  crossover = pkgs.callPackage ./cross-over { };
 }

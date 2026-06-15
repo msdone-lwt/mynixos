@@ -37,7 +37,6 @@
     packages = with pkgs; [
       # clash-verge-rev
       sparkle
-      crossover
       new-folo
       any-listen
       lx-music-desktop
