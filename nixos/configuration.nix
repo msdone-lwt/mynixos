@@ -226,7 +226,19 @@ in
   programs.steam.enable = true;
   # 启用 CoolerControl 守护进程和图形界面
   programs.coolercontrol.enable = true;
-  programs.nix-ld.enable = true;
+  programs.nix-ld.enable = true; # NOTE: 用于支持非 NixOS 二进制程序
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc.lib
+    zlib
+    zstd
+    glib
+    brotli
+    unixodbc
+    openssl
+    curl
+    expat
+    libxml2
+  ];
   environment.variables.EDITOR = "nvim";
   # 基于 Chromium 和 Electron 架构的应用程序原生运行在 Wayland 显示服务器上，而不是通过 XWayland（X11 的兼容层）运行。
   environment.sessionVariables = {

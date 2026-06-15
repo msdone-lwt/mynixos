@@ -34,7 +34,7 @@ return {
         "yaml-language-server",
         "actionlint",
         "yamlfmt",
-        -- "rust-analyzer",
+        "rust-analyzer",
         "qmlls"
       },
       -- 启动时自动安装缺失的工具

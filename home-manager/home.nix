@@ -90,8 +90,6 @@
       cargo
       rustc
       clippy
-      rustfmt
-      rust-analyzer
       # NOTE: hardware info
       cpu-x
       hardinfo2
