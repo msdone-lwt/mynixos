@@ -94,6 +94,7 @@
       cpu-x
       hardinfo2
       gpu-viewer
+      xwayland-satellite # niri 下 x11 支持
     ];
   };
 
