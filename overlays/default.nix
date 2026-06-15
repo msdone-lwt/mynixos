@@ -76,9 +76,9 @@
     # lx-music-desktop: 强制使用 X11 后端运行
     # 新版 Electron 在 Wayland 下存在多个显示 bug（窗口隐藏、拖动、窗口定位、托盘图标、桌面歌词）
     # 参考: https://github.com/lyswhut/lx-music-desktop/pull/2846#issuecomment-4641318543
-    lx-music-desktop = prev.lx-music-desktop.override {
-      commandLineArgs = "--ozone-platform=x11";
-    };
+    # lx-music-desktop = prev.lx-music-desktop.override {
+    #   commandLineArgs = "--ozone-platform=x11";
+    # };
   };
 
   # 应用后，在 flake input 中声明的 unstable nixpkgs 集将可以通过 'pkgs.unstable' 访问
