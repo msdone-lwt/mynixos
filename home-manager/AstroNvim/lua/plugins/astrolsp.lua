@@ -10,7 +10,7 @@ return {
   "AstroNvim/astrolsp",
   ---@type AstroLSPOpts
   opts = {
-  -- Configuration of LSP file operation functionality
+    -- Configuration of LSP file operation functionality
     file_operations = {
       -- the timeout when executing LSP client operations
       timeout = 10000,
@@ -46,6 +46,7 @@ return {
       disabled = { -- disable formatting capabilities for the listed language servers
         -- disable lua_ls formatting capability if you want to use StyLua to format your lua code
         -- "lua_ls",
+        "ast-grep",
       },
       timeout_ms = 1000, -- default format timeout
       -- filter = function(client) -- fully override the default formatting function
@@ -59,6 +60,8 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
+      -- ["*"] = { capabilities = {} }, -- modify default LSP client settings such as capabilities
+
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
       -- vtsls = { capabilities = { inlay_hints = { enabled = true } } },
       -- vtsls = {
@@ -79,12 +82,12 @@ return {
     },
     -- customize how language servers are attached
     handlers = {
-      -- a function without a key is simply the default handler, functions take two parameters, the server name and the configured options table for that server
-      function(server, opts) require("lspconfig")[server].setup(opts) end,
 
-      -- the key is the server that is being setup with `lspconfig`
+      -- a function with the key `*` modifies the default handler, functions takes the server name as the parameter
+      ["*"] = function(server) vim.lsp.enable(server) end,
+
+      -- the key is the server that is being setup with `vim.lsp.config`
       -- rust_analyzer = false, -- setting a handler to false will disable the set up of that language server
-      -- pyright = function(_, opts) require("lspconfig").pyright.setup(opts) end -- or a custom handler function can be passed
     },
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {

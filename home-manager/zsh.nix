@@ -16,7 +16,7 @@
       hdc = "hdc.exe";
       python = "python3";
       v = "nvim";
-      v5 = "NVIM_APPNAME=astronvim5 nvim";
+      v6 = "NVIM_APPNAME=astronvim6 nvim";
       ae = "aichat -e";
       ".." = "cd ..";
       "..." = "cd ../..";

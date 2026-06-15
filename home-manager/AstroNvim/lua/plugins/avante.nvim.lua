@@ -176,7 +176,7 @@ return {
     ---@alias Mode "agentic" | "legacy"
     mode = "agentic",
     -- cursor_applying_provider = "groq", -- 遍历文件插入，需要响应速度快的 provider
-    provider = "muyuan", -- Recommend using Claude
+    provider = "codex", -- Recommend using Claude
     auto_suggestions_provider = "gemini", -- Since auto-suggestions are a high-frequency operation and therefore expensive, it is recommended to specify an inexpensive provider or even a free provider: copilot
     -- disabled_tools = { "git_diff", "git_commit" },
     -- disabled_tools = { "replace_in_file"},
@@ -318,7 +318,7 @@ return {
       lazy = true,
       specs = {
         {
-          "Saghen/blink.cmp",
+          "saghen/blink.cmp",
           optional = true,
           opts = {
             sources = {

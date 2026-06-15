@@ -53,7 +53,7 @@
         DarkTheme=Material-Color-black
         # 跟随系统浅色/深色设置
         UseDarkTheme=true
-	# 字体
+	      # 字体
         Font="Sans 12"
         # 菜单字体
         MenuFont="Sans 12"
