@@ -12,6 +12,7 @@
   "astroui": { "branch": "main", "commit": "4943abbd42674b43249313afe83b91065a40e4be" },
   "autosave.nvim": { "branch": "main", "commit": "348f72cf0241e3e736e3396c4834def2f8ef8d10" },
   "avante.nvim": { "branch": "main", "commit": "e7a167e5bf7de92d406e371d500c803603ec642f" },
+  "base16-nvim": { "branch": "master", "commit": "23e5128eb5f629c29532c24a1e733cbe019f05bb" },
   "better-escape.nvim": { "branch": "master", "commit": "199dcc2643dec5d8dbdab4ec672cf405224dcb3b" },
   "blink-cmp-avante": { "branch": "master", "commit": "4f494c6e124acbe31a8f5d58effa0c14aa38a6d5" },
   "blink-copilot": { "branch": "main", "commit": "7ad8209b2f880a2840c94cdcd80ab4dc511d4f39" },
