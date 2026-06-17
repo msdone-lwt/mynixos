@@ -37,25 +37,13 @@
     stateVersion = "25.11";
     # 根据你的需求添加用户专属软件包：
     packages = with pkgs; [
-      # clash-verge-rev
-      sparkle
-      new-folo
-      any-listen
-      lx-music-desktop
+      # NOTE: 工具/依赖
       gh
-      wechat
-      cryptomator
-      tmux
-      google-chrome
-      vlc
       lazygit
-      fastfetch
-      # ghostty flake, pkgs.stdenv.hostPlatform.system 会自动匹配你的系统架构（如 x86_64-linux）
-      inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
-      # mcp-hub
-      inputs.mcp-hub.packages.${pkgs.stdenv.hostPlatform.system}.default
+      tldr
       # 硬件监控工具包
       lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
+      fastfetch
       # node
       nodejs_24
       typescript # tsc
@@ -73,11 +61,9 @@
       claude-code
       codex
       mgrep
-      unstable.cc-switch
       opencode
       codex-acp
       delta
-      # xclip   # 剪贴板支持 (Linux X11)
       wl-clipboard # 剪贴板支持 (Wayland)
       gcc
       gnumake
@@ -87,9 +73,8 @@
       qt6.qtbase 
       qt6.qtdeclarative
       pipewire
-      cava
-      tldr
       # tmux
+      tmux
       jq
       gnused
       bc
@@ -97,11 +82,29 @@
       cargo
       rustc
       clippy
-      # NOTE: hardware info
+      # dms-shell
+      cava
+      gpu-screen-recorder
+      slurp
+      # niri 下 x11 支持
+      xwayland-satellite
+      inputs.mcp-hub.packages.${pkgs.stdenv.hostPlatform.system}.default
+      # NOTE: GUI
+      # clash-verge-rev
+      vlc
       cpu-x
+      wechat
+      sparkle
+      new-folo
       hardinfo2
       gpu-viewer
-      xwayland-satellite # niri 下 x11 支持
+      any-listen
+      cryptomator
+      google-chrome
+      lx-music-desktop
+      unstable.cc-switch
+      # ghostty flake, pkgs.stdenv.hostPlatform.system 会自动匹配你的系统架构（如 x86_64-linux）
+      inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 

@@ -2,5 +2,21 @@
   "dankPomodoroTimer": {
     "enabled": true,
     "autoStartBreaks": false
+  },
+  "screenCaptureToolbar": {
+    "enabled": true,
+    "multiMonitorScreenshot": false,
+    "recordMic": false,
+    "captureMode": "interactive",
+    "stdout": true,
+    "swapCaptureKeys": false,
+    "recPillScreenName": "DP-4",
+    "recPillX": 1274,
+    "recPillY": 162
+  },
+  "fullscreenPowerMenu": {
+    "enabled": true,
+    "animationSpeed": 97,
+    "shutdownCommand": "systemctl poweroff"
   }
 }

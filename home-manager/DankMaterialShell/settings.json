@@ -198,11 +198,6 @@
       "pattern": "^steam_app_(\\d+)$",
       "replacement": "steam_icon_$1",
       "type": "regex"
-    },
-    {
-      "pattern": "cc switch",
-      "replacement": "cc-switch",
-      "type": "exact"
     }
   ],
   "centeringMode": "index",
@@ -468,7 +463,10 @@
           "enabled": true
         },
         "workspaceSwitcher",
-        "focusedWindow"
+        {
+          "id": "focusedWindow",
+          "enabled": true
+        }
       ],
       "centerWidgets": [
         {
@@ -477,7 +475,8 @@
         },
         {
           "id": "clock",
-          "enabled": true
+          "enabled": true,
+          "clockCompactMode": false
         },
         {
           "id": "dankPomodoroTimer",
@@ -510,7 +509,8 @@
         },
         {
           "id": "memUsage",
-          "enabled": true
+          "enabled": true,
+          "showSwap": false
         },
         {
           "id": "notificationButton",
