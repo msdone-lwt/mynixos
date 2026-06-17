@@ -205,6 +205,9 @@ in
   services.displayManager.gdm.enable = false;
   # 保留密钥环服务
   services.gnome.gnome-keyring.enable = true;
+  # 启用自动挂载服务（让文件管理器可以挂载 Windows 分区等）
+  services.udisks2.enable = true;
+  services.gvfs.enable = true;
   # 桌面环境 - niri + dms
   programs.dms-shell.enable = true; # 启用 DankMaterialShell
   programs.niri.enable = true; # 启用 Niri
