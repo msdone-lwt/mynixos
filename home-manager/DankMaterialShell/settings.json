@@ -28,7 +28,7 @@
   "useFahrenheit": false,
   "windSpeedUnit": "kmh",
   "nightModeEnabled": false,
-  "animationSpeed": 2,
+  "animationSpeed": 1,
   "customAnimationDuration": 1000,
   "syncComponentAnimationSpeeds": true,
   "popoutAnimationSpeed": 1,
@@ -138,10 +138,10 @@
   "showWorkspaceApps": true,
   "workspaceDragReorder": true,
   "maxWorkspaceIcons": 4,
-  "workspaceAppIconSizeOffset": 0,
+  "workspaceAppIconSizeOffset": 2,
   "groupWorkspaceApps": true,
   "workspaceFollowFocus": false,
-  "showOccupiedWorkspacesOnly": false,
+  "showOccupiedWorkspacesOnly": true,
   "reverseScrolling": false,
   "dwlShowAllTags": false,
   "workspaceColorMode": "default",
@@ -198,6 +198,11 @@
       "pattern": "^steam_app_(\\d+)$",
       "replacement": "steam_icon_$1",
       "type": "regex"
+    },
+    {
+      "pattern": "cc switch",
+      "replacement": "cc-switch",
+      "type": "exact"
     }
   ],
   "centeringMode": "index",
@@ -334,7 +339,7 @@
   "dockSmartAutoHide": false,
   "dockGroupByApp": false,
   "dockOpenOnOverview": false,
-  "dockPosition": 1,
+  "dockPosition": 0,
   "dockSpacing": 4,
   "dockBottomGap": 0,
   "dockMargin": 0,
@@ -381,7 +386,7 @@
   "notificationTimeoutCritical": 0,
   "notificationCompactMode": true,
   "notificationPopupPosition": -1,
-  "notificationAnimationSpeed": 3,
+  "notificationAnimationSpeed": 2,
   "notificationCustomAnimationDuration": 400,
   "notificationHistoryEnabled": true,
   "notificationHistoryMaxCount": 50,
@@ -556,7 +561,7 @@
       "scrollXBehavior": "workspace",
       "scrollYBehavior": "column",
       "shadowIntensity": 0,
-      "shadowOpacity": 56,
+      "shadowOpacity": 61,
       "shadowColorMode": "text",
       "shadowCustomColor": "#000000",
       "clickThrough": false
@@ -635,7 +640,11 @@
   "desktopWidgetGroups": [],
   "builtInPluginSettings": {
     "dms_settings_search": {
-      "trigger": "?"
+      "trigger": "?",
+      "enabled": true
+    },
+    "dms_sysmon": {
+      "enabled": true
     }
   },
   "clipboardEnterToPaste": false,

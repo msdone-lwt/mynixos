@@ -9,3 +9,9 @@ window-rule {
     default-column-width { fixed 900; }
     default-window-height { fixed 450; }
 }
+
+// @id=wr_1781531071352934454 @name=justclip
+window-rule {
+    match app-id="justclip"
+    open-floating true
+}

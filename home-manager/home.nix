@@ -47,6 +47,7 @@
       cryptomator
       tmux
       google-chrome
+      vlc
       lazygit
       fastfetch
       # ghostty flake, pkgs.stdenv.hostPlatform.system 会自动匹配你的系统架构（如 x86_64-linux）
@@ -77,11 +78,17 @@
       codex-acp
       delta
       # xclip   # 剪贴板支持 (Linux X11)
-      # wl-clipboard # 剪贴板支持 (Wayland)
+      wl-clipboard # 剪贴板支持 (Wayland)
       gcc
       gnumake
       pkg-config
       openssl.dev
+      cmake
+      qt6.qtbase 
+      qt6.qtdeclarative
+      pipewire
+      cava
+      tldr
       # tmux
       jq
       gnused
