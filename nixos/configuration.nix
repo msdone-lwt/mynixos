@@ -208,6 +208,13 @@ in
   # 启用自动挂载服务（让文件管理器可以挂载 Windows 分区等）
   services.udisks2.enable = true;
   services.gvfs.enable = true;
+  # support webdav
+  services.davfs2.enable = true;
+  fileSystems."/home/msdone/webdav" = {
+    device = "https://msdone1.com/dav/baidu";
+    fsType = "davfs";
+    options = [ "user" "rw" "noauto" "x-systemd.automount" "uid=msdone" "gid=users" ];
+  };
   # 桌面环境 - niri + dms
   programs.dms-shell.enable = true; # 启用 DankMaterialShell
   programs.niri.enable = true; # 启用 Niri
@@ -290,6 +297,7 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
+      "davfs2"  # 允许挂载 WebDAV
     ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
