@@ -84,6 +84,9 @@ in
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true; # UEFI
+  # 每次开机时清理 /tmp 目录，避免临时文件长期堆积。
+  boot.tmp.cleanOnBoot = true;
+
   # boot.supportedFilesystems = [ "ntfs" ];
   # boot.kernelPackages = pkgs.linuxPackages_latest; # 使用最新的linux 内核
 
