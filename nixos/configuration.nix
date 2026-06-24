@@ -209,7 +209,7 @@ in
   services.udisks2.enable = true;
   services.gvfs.enable = true;
   # support webdav
-  services.davfs2.enable = true;
+  services.davfs2.enable = false;
   fileSystems."/home/msdone/webdav" = {
     device = "https://msdone1.com/dav/baidu";
     fsType = "davfs";

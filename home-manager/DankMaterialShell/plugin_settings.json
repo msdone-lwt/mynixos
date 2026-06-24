@@ -12,7 +12,8 @@
     "swapCaptureKeys": false,
     "recPillScreenName": "DP-4",
     "recPillX": 1274,
-    "recPillY": 162
+    "recPillY": 162,
+    "customPath": "          "
   },
   "fullscreenPowerMenu": {
     "enabled": true,
