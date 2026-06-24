@@ -39,6 +39,7 @@
     packages = with pkgs; [
       # NOTE: 工具/依赖
       gh
+      sshfs
       lazygit
       tldr
       # 硬件监控工具包
