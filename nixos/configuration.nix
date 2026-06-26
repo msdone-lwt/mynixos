@@ -30,8 +30,7 @@ in
 
     # 你也可以将配置拆分并在这里导入片段：
     # ./users.nix
-    ./openlist.nix
-    ./nginx.nix
+    inputs.self.nixosModules.openlist
 
     # 导入自动生成的硬件配置
     ./hardware-configuration.nix
@@ -198,7 +197,6 @@ in
       "networkmanager"
       "wheel"
       "davfs2"  # 允许挂载 WebDAV
-      "openlist"
     ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
@@ -246,6 +244,15 @@ in
     };
   };
 
+  # NOTE: 12: services 
+  services.openlist = {
+    enable = true;
+    enableNginx = true;
+    enableUnlimitedUploadSize = true;
+    domain = "disk.msdone1.com";
+    acmeEmail = "lwt6077@gmail.com";
+    extraGroupUsers = [ "msdone" ];
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
