@@ -93,6 +93,10 @@ in
   # NOTE: 2: Network
 
   networking.hostName = "nixos-msdone"; # 设置你的主机名
+  networking.nameservers = [
+    "1.1.1.1"  # CF
+    "223.5.5.5"  # 阿里
+  ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -216,7 +220,14 @@ in
   fileSystems."/home/msdone/webdav" = {
     device = "https://msdone1.com/dav/baidu";
     fsType = "davfs";
-    options = [ "user" "rw" "noauto" "x-systemd.automount" "uid=msdone" "gid=users" ];
+    options = [
+      "user"
+      "rw"
+      "noauto"
+      "x-systemd.automount"
+      "uid=msdone"
+      "gid=users"
+    ];
   };
   # 桌面环境 - niri + dms
   programs.dms-shell.enable = true; # 启用 DankMaterialShell
@@ -230,10 +241,9 @@ in
   services.displayManager.dms-greeter.compositor.name = "niri"; # 用于运行 greeter 的 Wayland compositor
   # services.displayManager.dms-greeter.configFiles   FIXME:
   # services.displayManager.dms-greeter.configHome    FIXME:
-  
 
   # NOTE: 7: 系统级软件包与程序
-  
+
   programs.firefox.enable = false;
   programs.nano.enable = false;
   programs.steam.enable = true;
@@ -300,7 +310,7 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
-      "davfs2"  # 允许挂载 WebDAV
+      "davfs2" # 允许挂载 WebDAV
     ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
