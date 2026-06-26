@@ -98,6 +98,7 @@
       sparkle
       new-folo
       hardinfo2
+      obs-studio
       gpu-viewer
       any-listen
       cryptomator
