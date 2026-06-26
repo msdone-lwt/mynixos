@@ -92,7 +92,7 @@
       inputs.mcp-hub.packages.${pkgs.stdenv.hostPlatform.system}.default
       # NOTE: GUI
       # clash-verge-rev
-      vlc
+      mpv
       cpu-x
       wechat
       sparkle
