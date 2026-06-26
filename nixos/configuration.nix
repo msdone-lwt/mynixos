@@ -30,6 +30,8 @@ in
 
     # 你也可以将配置拆分并在这里导入片段：
     # ./users.nix
+    ./openlist.nix
+    ./nginx.nix
 
     # 导入自动生成的硬件配置
     ./hardware-configuration.nix
@@ -196,6 +198,7 @@ in
       "networkmanager"
       "wheel"
       "davfs2"  # 允许挂载 WebDAV
+      "openlist"
     ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
