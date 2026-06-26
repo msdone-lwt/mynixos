@@ -1,3 +1,5 @@
+[ nix-starter-configs ](https://github.com/Misterio77/nix-starter-configs) standard 版本
+
 # 1. 核心指挥部
 
 - flake.nix: 整个系统的入口点。它规定了系统要从哪里下载软件（Inputs），以及如何组装你的电脑配置、用户配置（Outputs）。
