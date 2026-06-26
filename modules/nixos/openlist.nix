@@ -82,7 +82,7 @@ in
           wantedBy = [ "multi-user.target" ];
 
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/openlist server --data ${cfg.dataDir}";
+            ExecStart = "${cfg.package}/bin/OpenList server --data ${cfg.dataDir}";
             WorkingDirectory = cfg.dataDir;
             StateDirectory = "openlist";
             User = cfg.user;
