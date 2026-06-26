@@ -2,6 +2,4 @@
 # 你可以使用 'nix build .#example' 来构建它们
 pkgs: {
   # example = pkgs.callPackage ./example { };
-  new-folo = pkgs.callPackage ./new-folo { };
-  any-listen = pkgs.callPackage ./any-listen { };
 }

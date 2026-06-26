@@ -18,15 +18,11 @@
     # 你也可以将配置拆分并在这里导入片段：
     # ./nvim.nix
     ./git.nix
-    ./fcitx5.nix
     ./zsh.nix
     ./tmux.nix
-    ./ghostty.nix
     ./nvim.nix
     ./lazygit.nix
     ./mcp.nix
-    ./dms-shell.nix
-    ./niri.nix
   ];
 
   home = {
@@ -34,7 +30,7 @@
     username = "msdone";
     homeDirectory = "/home/msdone";
     # 状态版本。参考：https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-    stateVersion = "25.11";
+    stateVersion = "23.11";
     # 根据你的需求添加用户专属软件包：
     packages = with pkgs; [
       # NOTE: 工具/依赖
@@ -42,8 +38,6 @@
       sshfs
       lazygit
       tldr
-      # 硬件监控工具包
-      lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
       fastfetch
       # node
       nodejs_24
@@ -83,29 +77,7 @@
       cargo
       rustc
       clippy
-      # dms-shell
-      cava
-      gpu-screen-recorder
-      slurp
-      # niri 下 x11 支持
-      xwayland-satellite
       inputs.mcp-hub.packages.${pkgs.stdenv.hostPlatform.system}.default
-      # NOTE: GUI
-      # clash-verge-rev
-      vlc
-      cpu-x
-      wechat
-      sparkle
-      new-folo
-      hardinfo2
-      gpu-viewer
-      any-listen
-      cryptomator
-      google-chrome
-      lx-music-desktop
-      unstable.cc-switch
-      # ghostty flake, pkgs.stdenv.hostPlatform.system 会自动匹配你的系统架构（如 x86_64-linux）
-      inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };
 

@@ -82,11 +82,13 @@ in
 
   # NOTE: 1: Bootloader.
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true; # UEFI
+  boot.loader.grub.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true; # UEFI
   # 每次开机时清理 /tmp 目录，避免临时文件长期堆积。
   boot.tmp.cleanOnBoot = true;
-
+  # 启用 zram 交换空间：用一块压缩内存当作 swap。
+  # 内存紧张时通常比直接使用磁盘 swap 更快，但会占用一些 CPU 做压缩。
+  zramSwap.enable = true;
   # boot.supportedFilesystems = [ "ntfs" ];
   # boot.kernelPackages = pkgs.linuxPackages_latest; # 使用最新的linux 内核
 
@@ -101,7 +103,6 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.firewall.trustedInterfaces = [ "mihomo" ];
 
   # NOTE: 3: Time zone
 
@@ -124,121 +125,17 @@ in
     LC_TELEPHONE = "zh_CN.UTF-8";
     LC_TIME = "zh_CN.UTF-8";
   };
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      qt6Packages.fcitx5-with-addons
-      qt6Packages.fcitx5-chinese-addons # pinyin
-      fcitx5-gtk
-      fcitx5-lua
-      fcitx5-pinyin-zhwiki
-      fcitx5-material-color # 包含暗黑主题 Material-Color-Black
-    ];
-  };
 
   # NOTE: 5: Font
 
-  fonts = {
-    packages = with pkgs; [
-      # nredfont
-      nerd-fonts.jetbrains-mono
-      nerd-fonts.fira-code
-      noto-fonts-cjk-sans
-      noto-fonts-cjk-serif
-      noto-fonts-color-emoji
-    ];
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        monospace = [
-          "${myMonoFont}"
-          "Noto Sans CJK SC"
-        ];
-        sansSerif = [
-          "${mySansFont}"
-          "Noto Sans CJK SC"
-        ];
-        serif = [
-          "${myFont}"
-          "Noto Serif CJK SC"
-        ];
-        emoji = [
-          "Noto Color Emoji"
-          "${myFont}"
-        ];
-      };
-    };
-  };
   # NOTE: 6: Desktop Environment.
-
-  # services.displayManager.gdm.enable = true;
-  # services.desktopManager.gnome.enable = true;
-  # services.xserver = {
-  #   # Enable the X11 window ing system.
-  #   enable = true;
-  #   # Configure keymap in X11
-  #   xkb = {
-  #     layout = "cn";
-  #     variant = "";
-  #   };
-  # };
-  # 覆盖 GNOME 的默认 GSettings 设置
-  # services.desktopManager.gnome.extraGSettingsOverrides = ''
-  #   [org.gnome.desktop.interface]
-  #   font-name='${myFont} ${myFontSize}'
-  #   document-font-name='${myFont} ${myFontSize}'
-  #   monospace-font-name='${myMonoFont} ${myFontSize}'
-  #
-  #   [org.gnome.desktop.wm.preferences]
-  #   titlebar-font='${myFont} Bold ${myFontSize}'
-  # '';
-  environment.etc."gtk-3.0/settings.ini".text = ''
-    [Settings]
-    gtk-font-name=${myFont} ${myFontSize}
-  '';
-  # NOTE: dms + niri
-
   # 禁用 X11（niri 是纯 Wayland）
   services.xserver.enable = false;
-  # XWayland 支持（如果需要运行 X11 应用）
-  programs.xwayland.enable = true;
-  # 禁用完整的 GNOME 桌面
-  services.desktopManager.gnome.enable = false;
-  services.displayManager.gdm.enable = false;
-  # 保留密钥环服务
-  services.gnome.gnome-keyring.enable = true;
-  # 启用自动挂载服务（让文件管理器可以挂载 Windows 分区等）
-  services.udisks2.enable = true;
-  services.gvfs.enable = true;
-  # support webdav
-  services.davfs2.enable = false;
-  fileSystems."/home/msdone/webdav" = {
-    device = "https://msdone1.com/dav/baidu";
-    fsType = "davfs";
-    options = [ "user" "rw" "noauto" "x-systemd.automount" "uid=msdone" "gid=users" ];
-  };
-  # 桌面环境 - niri + dms
-  programs.dms-shell.enable = true; # 启用 DankMaterialShell
-  programs.niri.enable = true; # 启用 Niri
-  programs.dms-shell.systemd.restartIfChanged = true; # 当 dms-shell 配置文件更改时，自动重启 dms-shell 服务
-  programs.dms-shell.quickshell.package = pkgs.quickshell; # quickshell 的安装包来源, options: pkgs.unstable.quickshell
-  programs.dms-shell.package = pkgs.dms-shell; # dms 的安装包来源, options: pkgs.unstable.dms-shell
-  programs.niri.package = pkgs.niri; # niri 的安装包来源, options: pkgs.unstable.niri
-  # services.greetd.useTextGreeter = true; # 启用文本登录界面 - tuiGreet
-  services.displayManager.dms-greeter.enable = true; # 启用 DankMaterialShell 的登录界面
-  services.displayManager.dms-greeter.compositor.name = "niri"; # 用于运行 greeter 的 Wayland compositor
-  # services.displayManager.dms-greeter.configFiles   FIXME:
-  # services.displayManager.dms-greeter.configHome    FIXME:
-  
 
   # NOTE: 7: 系统级软件包与程序
   
   programs.firefox.enable = false;
   programs.nano.enable = false;
-  programs.steam.enable = true;
-  # 启用 CoolerControl 守护进程和图形界面
-  programs.coolercontrol.enable = true;
   programs.nix-ld.enable = true; # NOTE: 用于支持非 NixOS 二进制程序
   programs.nix-ld.libraries = with pkgs; [
     stdenv.cc.cc.lib
@@ -262,30 +159,28 @@ in
     wget
     git
     curl
-    htop
-    mihomo
   ];
 
   # NOTE: 8: 打印机 Enable CUPS to print documents.
 
-  services.printing.enable = true;
+  services.printing.enable = false;
 
   # NOTE: 9: 音频 Enable sound with pipewire.
 
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
+  # services.pulseaudio.enable = false;
+  # security.rtkit.enable = true;
+  # services.pipewire = {
+  #   enable = true;
+  #   alsa.enable = true;
+  #   alsa.support32Bit = true;
+  #   pulse.enable = true;
+  #   # If you want to use JACK applications, uncomment this
+  #   #jack.enable = true;
+  #
+  #   # use the example session manager (no others are packaged yet so this is enabled by default,
+  #   # no need to redefine it in your config for now)
+  #   #media-session.enable = true;
+  # };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -305,6 +200,7 @@ in
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       # 如果你打算使用 SSH 连接，请在这里添加你的 SSH 公钥
+      ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF9GTWS2KVulkigK48DAqngPXlpN3bzVv3Of2eoNQaC+pvdKKqFXwpNf5KL643O51HUjAZNG2PxC6crlxQZb6bZ+K2y1FotslrznNHqJ7VgWJH/GcDVJ0WV6gxu3awqWpLA8fMYYgayV2lPxFkxtOux6ob1l+95D3qZLUKRKw7BLtuHnaKFJBFfHWPCYZvvzL+a/MWEWyOEf0TIeSQBG+AriYLIWkImivt6aCbOqvF7aCOkXaIkUrgzgEm2U3bRMAVe0I6PspVqtyW2PsQpHstLOVGu0irzNICJY/kZefGlA6fga+1b5v5/EhwzmieHGXOK8KJi3VvhCvz/GwMJaV/ skey-632gd18z'' 
     ];
   };
   # 系统层 git 配置
@@ -336,25 +232,17 @@ in
 
   # 这里设置 SSH 服务器。如果你正在设置无头系统（服务器），这非常重要。
   # 如果你不需要，可以随意删除。
-  # services.openssh = {
-  #   enable = true;
-  #   settings = {
-  #     # 偏好设置：禁止通过 SSH 进行 root 登录。
-  #     PermitRootLogin = "no";
-  #     # 偏好设置：仅使用密钥。
-  #     # 如果你想使用密码进行 SSH，请删除此行。
-  #     PasswordAuthentication = false;
-  #   };
-  # };
-
-  # 提权包装器
-  security.wrappers.mihomo = {
-    owner = "root";
-    group = "root";
-    capabilities = "cap_net_admin,cap_net_bind_service+ep";
-    source = "${pkgs.mihomo}/bin/mihomo";
+  services.openssh = {
+    enable = true;
+    settings = {
+      # 偏好设置：禁止通过 SSH 进行 root 登录。
+      PermitRootLogin = "no";
+      # 偏好设置：仅使用密钥。
+      # 如果你想使用密码进行 SSH，请删除此行。
+      PasswordAuthentication = false;
+    };
   };
-  # boot.kernelModules = [ "tun" ];
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -382,5 +270,5 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   # 状态版本。关于何时更新请参考：https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "25.11"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }
