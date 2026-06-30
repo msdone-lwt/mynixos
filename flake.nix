@@ -11,6 +11,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # ghostty flake
     ghostty.url = "github:ghostty-org/ghostty";
+    # cc-switch-cli flake
+    cc-switch-cli.url = "github:saladday/cc-switch-cli";
     # mcp-hub
     mcp-hub.url = "github:ravitemer/mcp-hub";
   };
