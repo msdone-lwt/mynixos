@@ -60,14 +60,6 @@
       codex-acp
       delta
       wl-clipboard # 剪贴板支持 (Wayland)
-      gcc
-      gnumake
-      pkg-config
-      openssl.dev
-      cmake
-      qt6.qtbase 
-      qt6.qtdeclarative
-      pipewire
       # tmux
       tmux
       jq

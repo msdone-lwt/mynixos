@@ -90,8 +90,13 @@ in
   # 启用 zram 交换空间：用一块压缩内存当作 swap。
   # 内存紧张时通常比直接使用磁盘 swap 更快，但会占用一些 CPU 做压缩。
   zramSwap.enable = true;
+  boot.loader.grub.configurationLimit = 5;
   # boot.supportedFilesystems = [ "ntfs" ];
   # boot.kernelPackages = pkgs.linuxPackages_latest; # 使用最新的linux 内核
+  documentation.nixos.enable = false;
+  documentation.man.enable = false;
+  documentation.info.enable = false;
+  documentation.doc.enable = false;
 
   # NOTE: 2: Network
 
