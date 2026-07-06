@@ -12,6 +12,7 @@
   secure1psidts = "$(${pkgs.coreutils}/bin/printenv SECURE_1PSIDTS 2>/dev/null || true)";
   apiKey = "$(${pkgs.coreutils}/bin/printenv API_KEY 2>/dev/null || true)";
   port = 8765;
+  systemctl = "${pkgs.systemd}/bin/systemctl";
 
   gemi2apiSrc = pkgs.fetchFromGitHub {
     owner = "zhiyu1998";
@@ -62,6 +63,10 @@ in {
     EOF
           chmod 0600 "$config_file"
         fi
+  '';
+
+  home.activation.startGeminiWebApi = lib.hm.dag.entryAfter ["geminiWebApi" "reloadSystemd"] ''
+    run ${systemctl} --user enable --now gemini-web-api.service
   '';
 
   systemd.user.services.gemini-web-api = {
