@@ -73,6 +73,7 @@ in
         flake-registry = "";
         # 针对 https://github.com/NixOS/nix/issues/9574 的权宜之计
         nix-path = config.nix.nixPath;
+        trusted-users = [ "root" "msdone" ];
       };
       # 偏好设置：禁用 channel (渠道)
       channel.enable = false;
@@ -248,7 +249,6 @@ in
       PasswordAuthentication = false;
     };
   };
-  settings.trusted-users = [ "root" "msdone" ];
 
   # NOTE: 12: services 
   # 通过命令初始化密码：sudo -u openlist OpenList admin set [password] --data /var/lib/openlist
