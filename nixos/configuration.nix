@@ -73,7 +73,10 @@ in
         flake-registry = "";
         # 针对 https://github.com/NixOS/nix/issues/9574 的权宜之计
         nix-path = config.nix.nixPath;
-        trusted-users = [ "root" "msdone" ];
+        trusted-users = [
+          "root"
+          "msdone"
+        ];
       };
       # 偏好设置：禁用 channel (渠道)
       channel.enable = false;
@@ -140,7 +143,7 @@ in
   services.xserver.enable = false;
 
   # NOTE: 7: 系统级软件包与程序
-  
+
   programs.firefox.enable = false;
   programs.nano.enable = false;
   programs.nix-ld.enable = true; # NOTE: 用于支持非 NixOS 二进制程序
@@ -202,12 +205,12 @@ in
     extraGroups = [
       "networkmanager"
       "wheel"
-      "davfs2"  # 允许挂载 WebDAV
+      "davfs2" # 允许挂载 WebDAV
     ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       # 如果你打算使用 SSH 连接，请在这里添加你的 SSH 公钥
-      ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF9GTWS2KVulkigK48DAqngPXlpN3bzVv3Of2eoNQaC+pvdKKqFXwpNf5KL643O51HUjAZNG2PxC6crlxQZb6bZ+K2y1FotslrznNHqJ7VgWJH/GcDVJ0WV6gxu3awqWpLA8fMYYgayV2lPxFkxtOux6ob1l+95D3qZLUKRKw7BLtuHnaKFJBFfHWPCYZvvzL+a/MWEWyOEf0TIeSQBG+AriYLIWkImivt6aCbOqvF7aCOkXaIkUrgzgEm2U3bRMAVe0I6PspVqtyW2PsQpHstLOVGu0irzNICJY/kZefGlA6fga+1b5v5/EhwzmieHGXOK8KJi3VvhCvz/GwMJaV/ skey-632gd18z'' 
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDF9GTWS2KVulkigK48DAqngPXlpN3bzVv3Of2eoNQaC+pvdKKqFXwpNf5KL643O51HUjAZNG2PxC6crlxQZb6bZ+K2y1FotslrznNHqJ7VgWJH/GcDVJ0WV6gxu3awqWpLA8fMYYgayV2lPxFkxtOux6ob1l+95D3qZLUKRKw7BLtuHnaKFJBFfHWPCYZvvzL+a/MWEWyOEf0TIeSQBG+AriYLIWkImivt6aCbOqvF7aCOkXaIkUrgzgEm2U3bRMAVe0I6PspVqtyW2PsQpHstLOVGu0irzNICJY/kZefGlA6fga+1b5v5/EhwzmieHGXOK8KJi3VvhCvz/GwMJaV/ skey-632gd18z"
     ];
   };
   # 系统层 git 配置
@@ -249,8 +252,19 @@ in
       PasswordAuthentication = false;
     };
   };
+  security.sudo.extraRules = [
+    {
+      users = [ "msdone" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
-  # NOTE: 12: services 
+  # NOTE: 12: services
   # 通过命令初始化密码：sudo -u openlist OpenList admin set [password] --data /var/lib/openlist
   services.openlist = {
     enable = true;
