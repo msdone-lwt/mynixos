@@ -248,6 +248,7 @@ in
       PasswordAuthentication = false;
     };
   };
+  settings.trusted-users = [ "root" "msdone" ];
 
   # NOTE: 12: services 
   # 通过命令初始化密码：sudo -u openlist OpenList admin set [password] --data /var/lib/openlist
