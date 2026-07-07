@@ -23,7 +23,6 @@
     ./nvim.nix
     ./lazygit.nix
     ./mcp.nix
-    ./gemini-web-api.nix
   ];
 
   home = {
