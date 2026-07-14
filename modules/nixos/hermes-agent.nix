@@ -26,6 +26,7 @@ in
       enable = true;
       addToSystemPackages = true;
       environmentFiles = [ config.sops.secrets."hermes-env".path ];
+      settings.terminal.cwd = "/var/lib/hermes/workspace";
     };
 
     # Share HERMES_HOME state with the interactive login user.

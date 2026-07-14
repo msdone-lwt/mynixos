@@ -283,7 +283,7 @@ in
   sops = {
     defaultSopsFile = ../secrets/hermes.yaml;
     # Private key MUST stay off the Nix store. Create with age-keygen (Task 4).
-    age.keyFile = "/var/lib/sops-nix/key.txt";
+    age.keyFile = "/home/msdone/.config/sops/age/keys.txt";
     secrets."hermes-env" = {
       # Upstream activation runs as root and concatenates environmentFiles into
       # $HERMES_HOME/.env as user hermes; root-readable secret is enough.
