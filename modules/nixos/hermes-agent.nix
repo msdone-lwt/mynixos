@@ -26,7 +26,13 @@ in
       enable = true;
       addToSystemPackages = true;
       environmentFiles = [ config.sops.secrets."hermes-env".path ];
-      settings.terminal.cwd = "/var/lib/hermes/workspace";
+      settings = {
+        terminal.cwd = "/var/lib/hermes/workspace";
+        model = {
+          base_url = "https://ai.hybgzs.com/v1";
+          default = "z-ai/glm-5.2";
+        };
+      };
     };
 
     # Share HERMES_HOME state with the interactive login user.
