@@ -31,6 +31,7 @@ in
     # 你也可以将配置拆分并在这里导入片段：
     # ./users.nix
     inputs.self.nixosModules.openlist
+    inputs.self.nixosModules.hermes-agent
 
     # 导入自动生成的硬件配置
     ./hardware-configuration.nix
@@ -273,6 +274,21 @@ in
     domain = "disk.msdone1.com";
     acmeEmail = "lwt6077@gmail.com";
     extraGroupUsers = [ "msdone" ];
+  };
+
+  # Hermes Agent gateway + CLI (shared HERMES_HOME under /var/lib/hermes)
+  services.msdone-hermes.enable = true;
+
+  # sops-nix: decrypt secrets/hermes.yaml → runtime path for hermes-env
+  sops = {
+    defaultSopsFile = ../secrets/hermes.yaml;
+    # Private key MUST stay off the Nix store. Create with age-keygen (Task 4).
+    age.keyFile = "/var/lib/sops-nix/key.txt";
+    secrets."hermes-env" = {
+      # Upstream activation runs as root and concatenates environmentFiles into
+      # $HERMES_HOME/.env as user hermes; root-readable secret is enough.
+      mode = "0400";
+    };
   };
 
   # Some programs need SUID wrappers, can be configured further or are
