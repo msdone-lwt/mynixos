@@ -71,6 +71,7 @@
       clippy
       inputs.mcp-hub.packages.${pkgs.stdenv.hostPlatform.system}.default
       inputs.cc-switch-cli.packages.${pkgs.stdenv.hostPlatform.system}.cc-switch-cli
+      sops
     ];
   };
 
