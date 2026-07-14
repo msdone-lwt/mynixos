@@ -4,4 +4,5 @@
   # 在此列出你的模块文件
   # my-module = import ./my-module.nix;
   openlist = import ./openlist.nix;
+  hermes-agent = import ./hermes-agent.nix;
 }
