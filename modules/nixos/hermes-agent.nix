@@ -38,6 +38,10 @@ in
           base_url = "https://ai.hybgzs.com/v1";
           key_env = "HYB_GROK";
           default_model = "grok-4.5";
+          models = {
+            "grok-4.5" = {};
+            "deepseek-ai/DeepSeek-V4-Pro" = {};
+          };
         };
       };
     };
