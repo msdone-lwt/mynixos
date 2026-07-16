@@ -34,12 +34,22 @@ in
         };
 
         providers.hyb-grok = {
-          name = "黑与白-grok-4.5";
+          name = "黑与白-grok";
           base_url = "https://ai.hybgzs.com/v1";
-          key_env = "HYB_GROK";
+          key_env = "HYB_GROK_KEY";
           default_model = "grok-4.5";
           models = {
             "grok-4.5" = {};
+            "grok-4.5-claude" = {};
+          };
+        };
+        providers.hyb-default = {
+          name = "黑与白-default";
+          base_url = "https://ai.hybgzs.com/v1";
+          key_env = "OPENAI_API_KEY";
+          default_model = "z-ai/glm-5.2";
+          models = {
+            "z-ai/glm-5.2" = {};
             "deepseek-ai/DeepSeek-V4-Pro" = {};
           };
         };
