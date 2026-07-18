@@ -277,7 +277,10 @@ in
   };
 
   # Hermes Agent gateway + CLI (shared HERMES_HOME under /var/lib/hermes)
-  services.msdone-hermes.enable = true;
+  services.msdone-hermes = {
+    enable = true;
+    sharedProjectDir = "/home/msdone/mynixos"; # 给 hermes 读写权限的目录
+  };
 
   # sops-nix: decrypt secrets/hermes.yaml → runtime path for hermes-env
   sops = {

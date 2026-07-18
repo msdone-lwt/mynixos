@@ -55,6 +55,18 @@ in
 {
   options.services.msdone-hermes = {
     enable = lib.mkEnableOption "Hermes Agent CLI + gateway on this server";
+
+    # Shared project tree hermes may read/write (needs traverse ACL on parent home).
+    sharedProjectDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/home/msdone/mynixos";
+      description = ''
+        Directory the hermes service user may access and modify.
+        ACL is applied declaratively on each NixOS activation:
+        - execute-only on the parent home so hermes can traverse into this path
+        - recursive rwx + default ACL on the project directory itself
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -160,5 +172,32 @@ in
 
     # Share HERMES_HOME state with the interactive login user.
     users.users.msdone.extraGroups = [ "hermes" ];
+
+    # Declarative ACL so the hermes service user can reach and edit sharedProjectDir.
+    # /home/msdone is mode 700; without --x on the home, hermes cannot traverse to mynixos.
+    # Do not use `exit` here: activation scripts are concatenated into one bash script.
+    system.activationScripts.hermesAccessSharedProject = {
+      deps = [ "users" "groups" ];
+      text = ''
+        shared="${cfg.sharedProjectDir}"
+        home="$(dirname "$shared")"
+
+        if [ -d "$home" ]; then
+          # Traverse only: do not grant list/read of the entire home.
+          ${pkgs.acl}/bin/setfacl -m u:hermes:--x "$home" || echo "hermes ACL: failed to set traverse ACL on $home"
+        else
+          echo "hermes ACL: home directory $home does not exist yet, skipping"
+        fi
+
+        if [ -d "$shared" ]; then
+          # Access ACL for existing entries; default ACL for files created later.
+          # Ignore errors on special/read-only mount points under the tree.
+          ${pkgs.acl}/bin/setfacl -R -m u:hermes:rwx "$shared" || echo "hermes ACL: partial failure setting access ACL on $shared"
+          ${pkgs.acl}/bin/setfacl -R -d -m u:hermes:rwx,u:msdone:rwx "$shared" || echo "hermes ACL: partial failure setting default ACL on $shared"
+        else
+          echo "hermes ACL: shared project $shared does not exist yet, skipping recursive ACL"
+        fi
+      '';
+    };
   };
 }
