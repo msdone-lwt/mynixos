@@ -17,16 +17,36 @@ let
   };
 
   # extraPlugins requires plugin.yaml at package root → split monorepo into two packages.
+  # IMPORTANT: both upstream plugin.yaml files use name: agnes. Hermes keys flat
+  # user plugins by yaml name, so identical names collide and only one loads.
+  # Give unique plugin.yaml names here; Python provider.name stays "agnes"
+  # (image_gen.provider / video_gen.provider still use "agnes").
   agnesImagePlugin = pkgs.runCommand "agnes-image" { } ''
     mkdir -p $out
-    cp ${agnesPluginsSrc}/image_gen/agnes/plugin.yaml $out/
     cp ${agnesPluginsSrc}/image_gen/agnes/__init__.py $out/
+    cat > $out/plugin.yaml <<'EOF'
+name: agnes-image
+version: 1.0.0
+description: "Agnes AI image generation backend (Agnes Image 2.1 Flash). Free text-to-image & image-to-image via agnes-ai.com."
+author: Start-Ten / community
+kind: backend
+requires_env:
+  - AGNES_API_KEY
+EOF
   '';
 
   agnesVideoPlugin = pkgs.runCommand "agnes-video" { } ''
     mkdir -p $out
-    cp ${agnesPluginsSrc}/video_gen/agnes/plugin.yaml $out/
     cp ${agnesPluginsSrc}/video_gen/agnes/__init__.py $out/
+    cat > $out/plugin.yaml <<'EOF'
+name: agnes-video
+version: 1.0.0
+description: "Agnes AI video generation backend (Agnes Video V2.0). Free text-to-video & image-to-video via agnes-ai.com."
+author: Start-Ten / community
+kind: backend
+requires_env:
+  - AGNES_API_KEY
+EOF
   '';
 
   # Toolsets for CLI + Telegram (include video understand + video gen).
@@ -96,7 +116,8 @@ in
         terminal.cwd = "/var/lib/hermes/workspace";
         model = {
           base_url = "https://ai.hybgzs.com/v1";
-          default = "z-ai/glm-5.2";
+          default = "grok-4.5";
+          provider = "custom:hyb-grok";
         };
 
         providers.hyb-grok = {
@@ -129,13 +150,10 @@ in
           api_mode = "chat_completions";
         };
 
-        # Enable user/nix-managed Agnes backends.
-        # Keys are path-derived (nix-managed-agnes-image / nix-managed-agnes-video);
-        # bare name "agnes" also matches plugin.yaml name for both.
+        # Enable nix-managed Agnes backends (unique plugin.yaml names; see packaging above).
         plugins.enabled = [
-          "agnes"
-          "nix-managed-agnes-image"
-          "nix-managed-agnes-video"
+          "agnes-image"
+          "agnes-video"
         ];
 
         # Image generation → Agnes Image 2.1 Flash
@@ -184,7 +202,9 @@ in
 
         if [ -d "$home" ]; then
           # Traverse only: do not grant list/read of the entire home.
-          ${pkgs.acl}/bin/setfacl -m u:hermes:--x "$home" || echo "hermes ACL: failed to set traverse ACL on $home"
+          # Always set mask (m::x): chmod 700 / homeMode rebuilds zero mask and
+          # would make user:hermes:--x effective --- without this.
+          ${pkgs.acl}/bin/setfacl -m u:hermes:--x,m::x "$home" || echo "hermes ACL: failed to set traverse ACL on $home"
         else
           echo "hermes ACL: home directory $home does not exist yet, skipping"
         fi
@@ -192,8 +212,8 @@ in
         if [ -d "$shared" ]; then
           # Access ACL for existing entries; default ACL for files created later.
           # Ignore errors on special/read-only mount points under the tree.
-          ${pkgs.acl}/bin/setfacl -R -m u:hermes:rwx "$shared" || echo "hermes ACL: partial failure setting access ACL on $shared"
-          ${pkgs.acl}/bin/setfacl -R -d -m u:hermes:rwx,u:msdone:rwx "$shared" || echo "hermes ACL: partial failure setting default ACL on $shared"
+          ${pkgs.acl}/bin/setfacl -R -m u:hermes:rwx,m::rwx "$shared" || echo "hermes ACL: partial failure setting access ACL on $shared"
+          ${pkgs.acl}/bin/setfacl -R -d -m u:hermes:rwx,u:msdone:rwx,m::rwx "$shared" || echo "hermes ACL: partial failure setting default ACL on $shared"
         else
           echo "hermes ACL: shared project $shared does not exist yet, skipping recursive ACL"
         fi
