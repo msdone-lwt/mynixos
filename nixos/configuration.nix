@@ -282,10 +282,10 @@ in
     sharedProjectDir = "/home/msdone/mynixos"; # 给 hermes 读写权限的目录
   };
 
-  # sops-nix: decrypt secrets/hermes.yaml → /run/secrets/sops-env
+  # sops-nix: decrypt secrets/sops-env.yaml → /run/secrets/sops-env
   # Shared dotenv for Hermes (environmentFiles) + msdone zsh (source).
   sops = {
-    defaultSopsFile = ../secrets/hermes.yaml;
+    defaultSopsFile = ../secrets/sops-env.yaml;
     # Private key MUST stay off the Nix store. Create with age-keygen (Task 4).
     age.keyFile = "/home/msdone/.config/sops/age/keys.txt";
     secrets."sops-env" = {
