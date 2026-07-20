@@ -155,7 +155,7 @@ in
             "gpt-5.5" = { };
           };
         };
-        
+
         providers.hyb-claude = {
           name = "黑与白-claude";
           base_url = "https://ai.hybgzs.com/claude";
@@ -165,6 +165,30 @@ in
           models = {
             "claude-opus-4-8" = { };
             "claude-sonnet-4-6" = { };
+          };
+        };
+
+        providers.chy = {
+          name = "chy公益站";
+          base_url = "https://chybenzun.top/v1";
+          key_env = "CHY_KEY";
+          default_model = "gpt-5.6-sol";
+          api_mode = "chat_completions";
+          models = {
+            "gpt-5.6-sol" = { };
+            "gpt-5.5" = { };
+          };
+        };
+
+        providers.anyrouter = {
+          name = "anyrouter";
+          base_url = "https://a-ocnfniawgw.cn-shanghai.fcapp.run/v1";
+          key_env = "ANYROUTER_KEY";
+          default_model = "gpt-5.6-sol";
+          api_mode = "chat_completions";
+          models = {
+            "gpt-5.6-sol" = { };
+            "gpt-5-codex" = { };
           };
         };
 
@@ -201,7 +225,6 @@ in
           };
         };
 
-        # Image understanding via Agnes multimodal chat model
         auxiliary.vision = {
           provider = "custom:agnes";
           model = "agnes-2.0-flash";
