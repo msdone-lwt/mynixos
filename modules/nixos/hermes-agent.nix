@@ -22,31 +22,31 @@ let
   # Give unique plugin.yaml names here; Python provider.name stays "agnes"
   # (image_gen.provider / video_gen.provider still use "agnes").
   agnesImagePlugin = pkgs.runCommand "agnes-image" { } ''
-    mkdir -p $out
-    cp ${agnesPluginsSrc}/image_gen/agnes/__init__.py $out/
-    cat > $out/plugin.yaml <<'EOF'
-name: agnes-image
-version: 1.0.0
-description: "Agnes AI image generation backend (Agnes Image 2.1 Flash). Free text-to-image & image-to-image via agnes-ai.com."
-author: Start-Ten / community
-kind: backend
-requires_env:
-  - AGNES_API_KEY
-EOF
+        mkdir -p $out
+        cp ${agnesPluginsSrc}/image_gen/agnes/__init__.py $out/
+        cat > $out/plugin.yaml <<'EOF'
+    name: agnes-image
+    version: 1.0.0
+    description: "Agnes AI image generation backend (Agnes Image 2.1 Flash). Free text-to-image & image-to-image via agnes-ai.com."
+    author: Start-Ten / community
+    kind: backend
+    requires_env:
+      - AGNES_API_KEY
+    EOF
   '';
 
   agnesVideoPlugin = pkgs.runCommand "agnes-video" { } ''
-    mkdir -p $out
-    cp ${agnesPluginsSrc}/video_gen/agnes/__init__.py $out/
-    cat > $out/plugin.yaml <<'EOF'
-name: agnes-video
-version: 1.0.0
-description: "Agnes AI video generation backend (Agnes Video V2.0). Free text-to-video & image-to-video via agnes-ai.com."
-author: Start-Ten / community
-kind: backend
-requires_env:
-  - AGNES_API_KEY
-EOF
+        mkdir -p $out
+        cp ${agnesPluginsSrc}/video_gen/agnes/__init__.py $out/
+        cat > $out/plugin.yaml <<'EOF'
+    name: agnes-video
+    version: 1.0.0
+    description: "Agnes AI video generation backend (Agnes Video V2.0). Free text-to-video & image-to-video via agnes-ai.com."
+    author: Start-Ten / community
+    kind: backend
+    requires_env:
+      - AGNES_API_KEY
+    EOF
   '';
 
   # Toolsets for CLI + Telegram (include video understand + video gen).
@@ -116,7 +116,7 @@ in
         terminal.cwd = "/var/lib/hermes/workspace";
         model = {
           base_url = "https://ai.hybgzs.com/v1";
-          default = "grok-4.5";
+          default = "grok-4.5-claude";
           provider = "custom:hyb-grok";
         };
 
@@ -125,19 +125,46 @@ in
           base_url = "https://ai.hybgzs.com/v1";
           key_env = "HYB_GROK_KEY";
           default_model = "grok-4.5";
+          api_mode = "chat_completions";
           models = {
             "grok-4.5" = { };
             "grok-4.5-claude" = { };
           };
         };
+
         providers.hyb-default = {
           name = "黑与白-default";
           base_url = "https://ai.hybgzs.com/v1";
-          key_env = "OPENAI_API_KEY";
+          key_env = "HYB_DEFAULT_KEY";
           default_model = "z-ai/glm-5.2";
+          api_mode = "chat_completions";
           models = {
             "z-ai/glm-5.2" = { };
-            "deepseek-ai/DeepSeek-V4-Pro" = { };
+            "deepseek-ai/deepseek-v4-pro" = { };
+          };
+        };
+
+        providers.hyb-gpt = {
+          name = "黑与白-gpt";
+          base_url = "https://ai.hybgzs.com/v1";
+          key_env = "HYB_GPT_KEY";
+          default_model = "gpt-5.6-sol";
+          api_mode = "chat_completions";
+          models = {
+            "gpt-5.6-sol" = { };
+            "gpt-5.5" = { };
+          };
+        };
+        
+        providers.hyb-claude = {
+          name = "黑与白-claude";
+          base_url = "https://ai.hybgzs.com/claude";
+          key_env = "HYB_CLAUDE_KEY";
+          default_model = "claude-opus-4-8";
+          api_mode = "anthropic_messages";
+          models = {
+            "claude-opus-4-8" = { };
+            "claude-sonnet-4-6" = { };
           };
         };
 
@@ -195,7 +222,10 @@ in
     # /home/msdone is mode 700; without --x on the home, hermes cannot traverse to mynixos.
     # Do not use `exit` here: activation scripts are concatenated into one bash script.
     system.activationScripts.hermesAccessSharedProject = {
-      deps = [ "users" "groups" ];
+      deps = [
+        "users"
+        "groups"
+      ];
       text = ''
         shared="${cfg.sharedProjectDir}"
         home="$(dirname "$shared")"
