@@ -50,9 +50,13 @@
         bindkey -r '^l'
       '')
       (lib.mkAfter ''
-         # --- 敏感数据加载 ---
-         if [ -f "$HOME/.zshrc.private" ]; then
-         source "$HOME/.zshrc.private"
+         # --- 敏感数据加载（sops-nix 解密的共享 dotenv；勿写进 nix store）---
+         # 路径由 sops.secrets."sops-env" 提供，默认 /run/secrets/sops-env
+         if [ -r /run/secrets/sops-env ]; then
+           set -a
+           # shellcheck disable=SC1091
+           source /run/secrets/sops-env
+           set +a
          fi
 
          # --- 自定义函数 hilog ---

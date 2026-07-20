@@ -92,9 +92,9 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = config.sops.secrets ? "hermes-env";
+        assertion = config.sops.secrets ? "sops-env";
         message = ''
-          services.msdone-hermes.enable requires sops.secrets."hermes-env".
+          services.msdone-hermes.enable requires sops.secrets."sops-env".
           Define it in nixos/configuration.nix (see design spec).
           Also put AGNES_API_KEY=... into that secret for Agnes image/video.
         '';
@@ -104,7 +104,7 @@ in
     services.hermes-agent = {
       enable = true;
       addToSystemPackages = true;
-      environmentFiles = [ config.sops.secrets."hermes-env".path ];
+      environmentFiles = [ config.sops.secrets."sops-env".path ];
 
       # Community Agnes image_gen + video_gen backends (symlinked as nix-managed-*).
       extraPlugins = [
