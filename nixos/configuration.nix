@@ -94,7 +94,15 @@ in
   boot.tmp.cleanOnBoot = true;
   # 启用 zram 交换空间：用一块压缩内存当作 swap。
   # 内存紧张时通常比直接使用磁盘 swap 更快，但会占用一些 CPU 做压缩。
-  zramSwap.enable = true;
+  # 2G 机默认 50%≈1G 太小；提到 4G 给 nix-daemon/hermes 峰值留缓冲。
+  # memoryMax 为未压缩容量上限；真实占用 ≈ 压缩后体积（zstd）。
+  zramSwap = {
+    enable = true;
+    memoryPercent = 250; # 相对 RAM 上限（与 memoryMax 取较小值）
+    memoryMax = 4 * 1024 * 1024 * 1024; # 4 GiB
+    algorithm = "zstd";
+    priority = 5;
+  };
   boot.loader.grub.configurationLimit = 5;
   # boot.supportedFilesystems = [ "ntfs" ];
   # boot.kernelPackages = pkgs.linuxPackages_latest; # 使用最新的linux 内核
