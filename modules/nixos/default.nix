@@ -5,4 +5,5 @@
   # my-module = import ./my-module.nix;
   openlist = import ./openlist.nix;
   hermes-agent = import ./hermes-agent.nix;
+  mihomo = import ./mihomo.nix;
 }

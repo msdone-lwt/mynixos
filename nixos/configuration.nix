@@ -32,6 +32,7 @@ in
     # ./users.nix
     inputs.self.nixosModules.openlist
     inputs.self.nixosModules.hermes-agent
+    inputs.self.nixosModules.mihomo
 
     # 导入自动生成的硬件配置
     ./hardware-configuration.nix
@@ -289,21 +290,20 @@ in
     enable = true;
     sharedProjectDir = "/home/msdone/mynixos"; # 给 hermes 读写权限的目录
 
-    # Reverse-proxy egress for geo-blocked providers (chy 公益站 only).
-    # chybenzun.top rejects the US region via Cloudflare cf-ipcountry; routing
-    # its traffic through a HK SOCKS5 exit restores access. All other providers
-    # (hybgzs, agnes, etc.) keep their direct base_urls and bypass this proxy.
-    # SOCKS5 URL is written verbatim into the /nix store python script; if you
-    # change it, rebuild: `sudo nixos-rebuild switch --flake .#nixos-msdone`.
-    enableReverseProxy = true;
-    socks5Info = {
-      url = "socks5://160.22.17.4:9988";
-      upstreams.chy = "https://chybenzun.top";
-    };
-
     # Telegram 等消息平台直接显示上游 provider 错误原文（仍做 secret redaction）。
     # 关掉则恢复 Hermes 默认的 “check gateway logs” 泛化提示。
     exposeProviderErrors = true;
+  };
+
+  # Mihomo: only DOMAIN-SUFFIX,chybenzun.top → PROXY (HK nodes from subscription);
+  # all other traffic DIRECT. Hermes gets HTTPS_PROXY=http://127.0.0.1:7890.
+  # Subscription URL lives in sops secret "mihomo-subscription-url" (one line, URL only).
+  services.msdone-mihomo = {
+    enable = true;
+    proxyDomains = [ "chybenzun.top" ];
+    mixedPort = 7890;
+    configureHermes = true;
+    subscriptionUrlFile = config.sops.secrets."mihomo-subscription-url".path;
   };
 
   # sops-nix: decrypt secrets/sops-env.yaml → /run/secrets/sops-env
@@ -314,6 +314,11 @@ in
     age.keyFile = "/home/msdone/.config/sops/age/keys.txt";
     secrets."sops-env" = {
       # owner=msdone so interactive zsh can source it; root still reads for systemd/hermes.
+      owner = "msdone";
+      mode = "0400";
+    };
+    # One-line Clash/Mihomo subscription URL for services.msdone-mihomo (not in git plaintext).
+    secrets."mihomo-subscription-url" = {
       owner = "msdone";
       mode = "0400";
     };
