@@ -280,6 +280,18 @@ in
   services.msdone-hermes = {
     enable = true;
     sharedProjectDir = "/home/msdone/mynixos"; # 给 hermes 读写权限的目录
+
+    # Reverse-proxy egress for geo-blocked providers (chy 公益站 only).
+    # chybenzun.top rejects the US region via Cloudflare cf-ipcountry; routing
+    # its traffic through a HK SOCKS5 exit restores access. All other providers
+    # (hybgzs, agnes, etc.) keep their direct base_urls and bypass this proxy.
+    # SOCKS5 URL is written verbatim into the /nix store python script; if you
+    # change it, rebuild: `sudo nixos-rebuild switch --flake .#nixos-msdone`.
+    enableReverseProxy = true;
+    socks5Info = {
+      url = "socks5://160.22.17.4:9988";
+      upstreams.chy = "https://chybenzun.top";
+    };
   };
 
   # sops-nix: decrypt secrets/sops-env.yaml → /run/secrets/sops-env
