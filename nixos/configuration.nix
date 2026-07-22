@@ -300,6 +300,10 @@ in
       url = "socks5://160.22.17.4:9988";
       upstreams.chy = "https://chybenzun.top";
     };
+
+    # Telegram 等消息平台直接显示上游 provider 错误原文（仍做 secret redaction）。
+    # 关掉则恢复 Hermes 默认的 “check gateway logs” 泛化提示。
+    exposeProviderErrors = true;
   };
 
   # sops-nix: decrypt secrets/sops-env.yaml → /run/secrets/sops-env

@@ -225,6 +225,19 @@ in
         '';
       };
     };
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # Gateway: expose raw provider/API error bodies on messaging platforms
+    # (Telegram etc.). Uses pkgs.hermes-agent-patched from the mynixos overlay
+    # (gateway/run.py patched at the package layer). Disable to restore the
+    # upstream hermes-agent behaviour.
+    # ─────────────────────────────────────────────────────────────────────────
+    exposeProviderErrors = lib.mkEnableOption ''
+      Show raw (secret-redacted) provider/API error bodies on Telegram and other
+      messaging platforms instead of the generic "check gateway logs" message.
+      Uses the overlay-built pkgs.hermes-agent-patched; leave off in multi-user
+      setups if you do not want request IDs / channel errors in chat.
+    '';
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
@@ -483,6 +496,14 @@ in
       # non-{lib.mkDefault,...} values).
       services.hermes-agent.settings.providers.chy.base_url =
         "http://127.0.0.1:${toString cfg.socks5Info.listenPort}/chy/v1";
+    })
+
+    (lib.mkIf cfg.exposeProviderErrors {
+      # Use the overlay-provided patched hermes-agent so Telegram and other
+      # messaging surfaces receive the secret-redacted provider error body.
+      # pkgs.hermes-agent-patched is defined in overlays/default.nix.
+      # mkForce: beat the hermes-agent module's package default (flake package).
+      services.hermes-agent.package = lib.mkForce pkgs.hermes-agent-patched;
     })
   ]);
 }
