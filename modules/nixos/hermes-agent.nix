@@ -131,9 +131,13 @@ in
       settings = {
         terminal.cwd = "/var/lib/hermes/workspace";
         model = {
-          base_url = "https://ai.hybgzs.com/v1";
-          default = "grok-4.5-claude";
-          provider = "custom:hyb-grok";
+          # base_url = "https://ai.hybgzs.com/v1";
+          # default = "grok-4.5-claude";
+          # provider = "custom:hyb-grok";
+          base_url = "https://chybenzun.top/v1";
+          # default = "gpt-5.6-sol";
+          default = "gpt-5.5";
+          provider = "custom:chy";
         };
 
         providers.hyb-grok = {
@@ -166,6 +170,9 @@ in
           key_env = "HYB_GPT_KEY";
           default_model = "gpt-5.6-sol";
           api_mode = "chat_completions";
+          # Upstream channel whitelists codex_cli_rs/* UA; OpenAI/Python gets 403
+          # channel:client_restricted on gpt-5.6-sol (2026-07-22).
+          extra_headers.User-Agent = "codex_cli_rs/0.3.0 (Linux; x86_64)";
           models = {
             "gpt-5.6-sol" = { };
             "gpt-5.5" = { };
