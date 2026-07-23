@@ -13,6 +13,10 @@
     ghostty.url = "github:ghostty-org/ghostty";
     # mcp-hub
     mcp-hub.url = "github:ravitemer/mcp-hub";
+
+    # Encrypted secrets (API keys, bot tokens)
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -61,6 +65,8 @@
         nixos-msdone = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs; };
           modules = [
+            # sops
+            inputs.sops-nix.nixosModules.sops
             # > nixos 配置文件 <
             ./nixos/configuration.nix
             # 集成 home-manager 配置: 导入 Home Manager NixOS 模块

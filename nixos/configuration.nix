@@ -94,8 +94,8 @@ in
 
   networking.hostName = "nixos-msdone"; # 设置你的主机名
   networking.nameservers = [
-    "1.1.1.1"  # CF
-    "223.5.5.5"  # 阿里
+    "1.1.1.1" # CF
+    "223.5.5.5" # 阿里
   ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -365,6 +365,22 @@ in
     source = "${pkgs.mihomo}/bin/mihomo";
   };
   # boot.kernelModules = [ "tun" ];
+
+  # sops-nix: decrypt secrets/sops-env.yaml → /run/secrets/sops-env
+  sops = {
+    defaultSopsFile = ../secrets/sops-env.yaml;
+    # Private key MUST stay off the Nix store. Create with age-keygen (Task 4).
+    age.keyFile = "/home/msdone/.config/sops/age/keys.txt";
+    secrets."sops-env" = {
+      # owner=msdone so interactive zsh can source it; root still reads for systemd/hermes.
+      owner = "msdone";
+      mode = "0400";
+    };
+    # secrets."xxx" = {
+    #   owner = "msdone";
+    #   mode = "0400";
+    # };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

@@ -6,7 +6,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # 你可以在这里导入其他的 home-manager 模块
   imports = [
     # 如果你想使用你自己的 flake 导出的模块（来自 modules/home-manager）：
@@ -43,6 +44,7 @@
       sshfs
       lazygit
       tldr
+      sops
       # 硬件监控工具包
       lm_sensors # 通过 sudo sensors-detect 使用, 可以查找出 nct6683 等内核驱动
       fastfetch
@@ -72,7 +74,7 @@
       pkg-config
       openssl.dev
       cmake
-      qt6.qtbase 
+      qt6.qtbase
       qt6.qtdeclarative
       pipewire
       # tmux
