@@ -295,6 +295,7 @@
   "audioInputDevicePins": {},
   "audioOutputDevicePins": {
     "preferredOutput": [
+      "alsa_output.pci-0000_01_00.1.hdmi-stereo",
       "alsa_output.usb-MOONDROP_MOONDROP_Rays_00000000000829-00.analog-stereo"
     ]
   },

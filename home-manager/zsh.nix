@@ -23,6 +23,7 @@
       avante = "nvim -c \"lua vim.defer_fn(function()require(\\\"avante.api\\\").zen_mode()end, 100)\"";
       updaterebuild = "git -C ${config.home.homeDirectory}/mynixos add . && sudo nix flake update && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/mynixos#nixos-msdone";
       rebuild = "git -C ${config.home.homeDirectory}/mynixos add . && sudo nixos-rebuild switch --flake ${config.home.homeDirectory}/mynixos#nixos-msdone";
+      rebuild-server-msdone1 = ''NIX_SSHOPTS="-C -o ServerAliveInterval=30 -o ServerAliveCountMax=3" nixos-rebuild switch --flake "/home/msdone/code/server-nixos#nixos-msdone" --target-host msdone1 --sudo --use-substitutes'';
       deletegen = "sudo nix-collect-garbage -d";
       optimise = "nix-store --optimise";
       listfd = "sysctl fs.file-nr";
