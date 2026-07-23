@@ -45,20 +45,24 @@ let
     # stay out of the Nix store when you pass a sops-backed url via
     # subscriptionUrlFile (written into the runtime config by ExecStartPre).
     proxy-providers = lib.optionalAttrs (cfg.subscriptionUrl != null || cfg.subscriptionUrlFile != null) {
-      hk = {
-        type = "http";
-        # Placeholder replaced at service start when subscriptionUrlFile is set.
-        url = if cfg.subscriptionUrl != null then cfg.subscriptionUrl else "__SUBSCRIPTION_URL__";
-        path = "./providers/hk.yaml";
-        interval = cfg.subscriptionInterval;
-        health-check = {
-          enable = true;
-          url = "https://www.gstatic.com/generate_204";
-          interval = 300;
+      hk =
+        {
+          type = "http";
+          # Placeholder replaced at service start when subscriptionUrlFile is set.
+          url = if cfg.subscriptionUrl != null then cfg.subscriptionUrl else "__SUBSCRIPTION_URL__";
+          path = "./providers/hk.yaml";
+          health-check = {
+            enable = true;
+            url = "https://www.gstatic.com/generate_204";
+            interval = 300;
+          };
+          # Explicitly do NOT import rules from the subscription.
+          # (proxy-providers only supply proxies; rules are only from our `rules`.)
+        }
+        # interval: 0 / null = no automatic subscription refresh (manual mihomo-update only).
+        // lib.optionalAttrs (cfg.subscriptionInterval != null && cfg.subscriptionInterval > 0) {
+          interval = cfg.subscriptionInterval;
         };
-        # Explicitly do NOT import rules from the subscription.
-        # (proxy-providers only supply proxies; rules are only from our `rules`.)
-      };
     };
 
     proxy-groups = [
@@ -167,9 +171,16 @@ in
     };
 
     subscriptionInterval = lib.mkOption {
-      type = lib.types.int;
-      default = 3600;
-      description = "Proxy-provider refresh interval in seconds.";
+      type = lib.types.nullOr lib.types.ints.unsigned;
+      default = null;
+      example = 86400;
+      description = ''
+        Proxy-provider auto-refresh interval in seconds.
+        null or 0 (default): do NOT auto-update the subscription; only
+        refresh when you run `mihomo-update` (PUT /providers/proxies/hk)
+        or restart mihomo (first fetch on start still happens).
+        Set e.g. 3600 / 86400 if you want periodic refresh.
+      '';
     };
 
     # Wire Hermes Agent process to this proxy (HTTPS_PROXY etc.).
