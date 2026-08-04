@@ -300,7 +300,7 @@ in
   # Subscription URL lives in sops secret "mihomo-subscription-url" (one line, URL only).
   services.msdone-mihomo = {
     enable = true;
-    proxyDomains = [ "chybenzun.top" ];
+    proxyDomains = [ "chybenzun.top" "cdk.hybgzs.com" ];
     mixedPort = 7890;
     configureHermes = true;
     subscriptionUrlFile = config.sops.secrets."mihomo-subscription-url".path;
