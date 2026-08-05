@@ -219,6 +219,17 @@ in
                 "claude-sonnet-4-6" = { };
               };
             };
+            
+            providers.grok2api = {
+              name = "自建grok2api";
+              base_url = "http://127.0.0.1:8000/v1";
+              key_env = "GROK2API_KEY";
+              default_model = "grok-chat-fast";
+              api_mode = "anthropic_messages";
+              models = {
+                "grok-chat-fast" = { };
+              };
+            };
 
             providers.chy = {
               name = "chy公益站";
