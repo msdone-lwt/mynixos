@@ -33,6 +33,7 @@ in
     inputs.self.nixosModules.openlist
     inputs.self.nixosModules.hermes-agent
     inputs.self.nixosModules.mihomo
+    inputs.self.nixosModules.grok2api
 
     # 导入自动生成的硬件配置
     ./hardware-configuration.nix
@@ -300,10 +301,17 @@ in
   # Subscription URL lives in sops secret "mihomo-subscription-url" (one line, URL only).
   services.msdone-mihomo = {
     enable = true;
-    proxyDomains = [ "chybenzun.top" "cdk.hybgzs.com" ];
+    proxyDomains = [ "chybenzun.top" "cdk.hybgzs.com" "x.ai"];
     mixedPort = 7890;
     configureHermes = true;
     subscriptionUrlFile = config.sops.secrets."mihomo-subscription-url".path;
+  };
+
+  # grok2api: Docker 容器 + nginx 反代到 grok.msdone1.com
+  # config.yaml 由 sops 管理（secrets/sops-env.yaml 里的 grok2api-config 键）
+  services.msdone-grok2api = {
+    enable = true;
+    domain = "grok.msdone1.com";
   };
 
   # sops-nix: decrypt secrets/sops-env.yaml → /run/secrets/sops-env
@@ -320,6 +328,12 @@ in
     # One-line Clash/Mihomo subscription URL for services.msdone-mihomo (not in git plaintext).
     secrets."mihomo-subscription-url" = {
       owner = "msdone";
+      mode = "0400";
+    };
+    # grok2api config.yaml (multi-line, contains jwtSecret/credentialEncryptionKey/adminPassword)
+    # owner=hermes 让 grok-register 脚本能读取并自动同步到 config.json
+    secrets."grok2api-config" = {
+      owner = "hermes";
       mode = "0400";
     };
   };

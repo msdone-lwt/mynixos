@@ -240,7 +240,10 @@ in
                   echo "mihomo: subscriptionUrlFile is empty" >&2
                   exit 1
                 fi
-                ${pkgs.gnused}/bin/sed "s|__SUBSCRIPTION_URL__|$url|g" \
+                # sed replacement text treats '&' as "matched text". GitLab raw
+                # URLs carry &private_token=... so we must escape &, |, \.
+                url_esc=$(printf '%s' "$url" | ${pkgs.gnused}/bin/sed 's/[&|\\]/\\&/g')
+                ${pkgs.gnused}/bin/sed "s|__SUBSCRIPTION_URL__|$url_esc|g" \
                   ${mihomoConfigYaml} > ${runtimeConfigPath}
                 chmod 0600 ${runtimeConfigPath}
               ''

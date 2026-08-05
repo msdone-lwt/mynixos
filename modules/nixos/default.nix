@@ -6,4 +6,5 @@
   openlist = import ./openlist.nix;
   hermes-agent = import ./hermes-agent.nix;
   mihomo = import ./mihomo.nix;
+  grok2api = import ./grok2api.nix;
 }
