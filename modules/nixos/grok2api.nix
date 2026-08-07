@@ -46,13 +46,19 @@ in
     virtualisation.oci-containers.containers.grok2api = {
       image = "ghcr.io/chenyme/grok2api:latest";
       autoStart = true;
-      ports = [ "127.0.0.1:${toString cfg.listenPort}:8000" ];
+      # host 网络：容器与宿主机共享 loopback，可直接用 mihomo 的
+      # http://127.0.0.1:7890 做 Web→Build / OAuth egress。
+      # 不再做 -p 映射；进程在宿主机上听 listenPort（镜像默认 0.0.0.0:8000）。
+      # 防火墙只放行 80/443，8000 不对公网开放。
       volumes = [
         "${cfg.configSecretFile}:/run/grok2api/config.yaml:ro"
         "grok2api-data:/app/data"
       ];
       environment.TZ = "Asia/Shanghai";
-      extraOptions = [ "--init" ];
+      extraOptions = [
+        "--init"
+        "--network=host"
+      ];
       # sops.secrets."grok2api-config" 在 configuration.nix 里声明
       # 容器通过 volumes 直接挂 /run/secrets/grok2api-config
     };

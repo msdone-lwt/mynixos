@@ -224,10 +224,10 @@ in
               name = "自建grok2api";
               base_url = "http://127.0.0.1:8000/v1";
               key_env = "GROK2API_KEY";
-              default_model = "grok-chat-fast";
-              api_mode = "anthropic_messages";
+              default_model = "grok-4.5";
+              api_mode = "chat_completions";
               models = {
-                "grok-chat-fast" = { };
+                "grok-4.5" = { };
               };
             };
 

@@ -301,7 +301,13 @@ in
   # Subscription URL lives in sops secret "mihomo-subscription-url" (one line, URL only).
   services.msdone-mihomo = {
     enable = true;
-    proxyDomains = [ "chybenzun.top" "cdk.hybgzs.com" "x.ai" "ipinfo.io"];
+    proxyDomains = [
+      "chybenzun.top"
+      "cdk.hybgzs.com"
+      "x.ai"
+      "grok.com"
+      "ipinfo.io"
+    ];
     mixedPort = 7890;
     configureHermes = true;
     subscriptionUrlFile = config.sops.secrets."mihomo-subscription-url".path;
