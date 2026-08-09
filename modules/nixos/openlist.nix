@@ -140,6 +140,10 @@ in
             }
             // lib.optionalAttrs cfg.enableUnlimitedUploadSize {
               extraConfig = ''
+                proxy_read_timeout 3600s;
+                proxy_send_timeout 3600s;
+                proxy_connect_timeout 60s;
+                proxy_request_buffering off; 
                 client_max_body_size 0;
               '';
             };
