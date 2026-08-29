@@ -178,7 +178,7 @@ in
               api_mode = "chat_completions";
               models = {
                 "z-ai/glm-5.2" = { };
-                "deepseek-ai/deepseek-v4-pro" = { };
+                "moonshotai/kimi-k3" = { };
               };
             };
 
@@ -194,6 +194,17 @@ in
               };
             };
 
+            providers.hyb-glm = {
+              name = "黑与白-glm";
+              base_url = "https://ai.hybgzs.com/v1";
+              key_env = "HYB_GLM_KEY";
+              default_model = "glm-5.2";
+              api_mode = "chat_completions";
+              models = {
+                "glm-5.2" = { };
+              };
+            };
+
             providers.hyb-kimi = {
               name = "黑与白-kimi";
               base_url = "https://ai.hybgzs.com/v1";
@@ -204,7 +215,6 @@ in
                 "k3" = {
                   context_length = 1048576;
                 };
-                "gpt-5.6-sol" = { };
               };
             };
 
@@ -219,7 +229,7 @@ in
                 "claude-sonnet-4-6" = { };
               };
             };
-            
+
             providers.grok2api = {
               name = "自建grok2api";
               base_url = "http://127.0.0.1:8000/v1";
@@ -254,6 +264,22 @@ in
               models = {
                 "gpt-5.6-sol" = { };
                 "gpt-5-codex" = { };
+              };
+            };
+            
+            providers.bohe = {
+              name = "薄荷 api";
+              base_url = "https://x666.me/v1";
+              key_env = "BOHE_API_KEY";
+              default_model = "deepseek-ai/deepseek-v4-flash-0731";
+              api_mode = "chat_completions";
+              models = {
+                "deepseek-ai/deepseek-v4-flash-0731" = { };
+                "glm-5.2-fast" = { };
+                "glm-5.2" = { };
+                "grok-4.5" = { };
+                "moonshotai/kimi-k3" = { };
+                "grok-4.6" = { };
               };
             };
 

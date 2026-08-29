@@ -304,6 +304,7 @@ in
     proxyDomains = [
       "chybenzun.top"
       "cdk.hybgzs.com"
+      "ai.hybgzs.com"
       "x.ai"
       "grok.com"
       "ipinfo.io"
